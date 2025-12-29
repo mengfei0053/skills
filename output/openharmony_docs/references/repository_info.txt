@@ -1,0 +1,5 @@
+origin	https://github.com/mengfei0053/openharmony-6.0-app-dev-docs.git (fetch)
+origin	https://github.com/mengfei0053/openharmony-6.0-app-dev-docs.git (push)
+ffc6cdf 6.0
+
+Last Updated: 2025-12-29

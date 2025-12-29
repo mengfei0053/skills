@@ -1,0 +1,181 @@
+.
+|-- IDL
+|   `-- figures
+|-- ads-service
+|   `-- oaid
+|-- ai
+|   |-- mindspore
+|   `-- nnrt
+|-- application-models
+|   |-- figures
+|   `-- public_sys-resources
+|-- application-test
+|   `-- figures
+|-- arkts-utils
+|   `-- figures
+|-- basic-services
+|   |-- account
+|   |-- common-event
+|   |-- compress
+|   |-- pasteboard
+|   |-- print
+|   |-- request
+|   |-- selectionInput
+|   |-- update
+|   `-- usb
+|-- calendarmanager
+|-- connectivity
+|   |-- bluetooth
+|   |-- nfc
+|   `-- wlan
+|-- contacts
+|-- database
+|   `-- figures
+|-- device
+|   |-- driver
+|   |-- input
+|   |-- location
+|   |-- sensor
+|   `-- stationary
+|-- device-usage-statistics
+|-- dfx
+|   `-- figures
+|-- displaymanager
+|-- distributedservice
+|   `-- figures
+|-- enterprise-device-management
+|-- faqs
+|   |-- compiler
+|   `-- figures
+|-- ffrt
+|   `-- figures
+|-- file-management
+|   |-- figures
+|   `-- public_sys-resources
+|-- form
+|   `-- figures
+|-- graphics
+|   `-- figures
+|-- graphics3d
+|   `-- figures
+|-- inputmethod
+|   `-- figures
+|-- internationalization
+|   |-- figures
+|   `-- public_sys-resources
+|-- ipc
+|   `-- figures
+|-- mdm
+|   `-- figures
+|-- mechanicManager
+|   `-- figures
+|-- media
+|   |-- audio
+|   |-- avcodec
+|   |-- avsession
+|   |-- camera
+|   |-- drm
+|   |-- image
+|   |-- media
+|   `-- medialibrary
+|-- napi
+|   `-- figures
+|-- network
+|   `-- figures
+|-- notification
+|   |-- figures
+|   `-- public_sys-resources
+|-- onlyfortest
+|   |-- 8Release
+|   |-- 9Release
+|   |-- arkts-utils
+|   |-- media
+|   `-- reference
+|-- performance
+|   `-- figures
+|-- public_sys-resources
+|-- quick-start
+|   |-- figures
+|   `-- public_sys-resources
+|-- reference
+|   |-- apis-ability-kit
+|   |-- apis-accessibility-kit
+|   |-- apis-ads-kit
+|   |-- apis-arkdata
+|   |-- apis-arkgraphics2d
+|   |-- apis-arkgraphics3d
+|   |-- apis-arkts
+|   |-- apis-arkui
+|   |-- apis-arkweb
+|   |-- apis-asset-store-kit
+|   |-- apis-audio-kit
+|   |-- apis-avcodec-kit
+|   |-- apis-avsession-kit
+|   |-- apis-backgroundtasks-kit
+|   |-- apis-basic-services-kit
+|   |-- apis-calendar-kit
+|   |-- apis-camera-kit
+|   |-- apis-connectivity-kit
+|   |-- apis-contacts-kit
+|   |-- apis-core-file-kit
+|   |-- apis-crypto-architecture-kit
+|   |-- apis-data-protection-kit
+|   |-- apis-device-certificate-kit
+|   |-- apis-distributedservice-kit
+|   |-- apis-driverdevelopment-kit
+|   |-- apis-drm-kit
+|   |-- apis-ffrt-kit
+|   |-- apis-form-kit
+|   |-- apis-image-kit
+|   |-- apis-ime-kit
+|   |-- apis-input-kit
+|   |-- apis-ipc-kit
+|   |-- apis-localization-kit
+|   |-- apis-location-kit
+|   |-- apis-mdm-kit
+|   |-- apis-mechanic-kit
+|   |-- apis-media-kit
+|   |-- apis-media-library-kit
+|   |-- apis-mindspore-lite-kit
+|   |-- apis-multimodalawareness-kit
+|   |-- apis-network-kit
+|   |-- apis-neural-network-runtime-kit
+|   |-- apis-notification-kit
+|   |-- apis-performance-analysis-kit
+|   |-- apis-sensor-service-kit
+|   |-- apis-telephony-kit
+|   |-- apis-test-kit
+|   |-- apis-universal-keystore-kit
+|   |-- apis-user-authentication-kit
+|   |-- common
+|   |-- figures
+|   `-- native-lib
+|-- security
+|   |-- AccessToken
+|   |-- AssetStoreKit
+|   |-- CryptoArchitectureKit
+|   |-- DataProtectionKit
+|   |-- DeviceCertificateKit
+|   |-- SecurityPrivacyCenter
+|   |-- UniversalKeystoreKit
+|   `-- UserAuthenticationKit
+|-- task-management
+|   |-- figures
+|   `-- public_sys-resources
+|-- telephony
+|-- tools
+|   |-- figures
+|   `-- public_sys-resources
+|-- ui
+|   |-- figures
+|   |-- public_sys-resources
+|   `-- state-management
+|-- web
+|   `-- figures
+|-- webgl
+|   |-- figures
+|   `-- public_sys-resources
+`-- windowmanager
+    `-- figures
+
+179 directories
