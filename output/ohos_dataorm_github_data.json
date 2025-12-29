@@ -1,0 +1,1415 @@
+{
+  "repo_info": {
+    "name": "ohos_dataorm",
+    "full_name": "mengfei0053/ohos_dataorm",
+    "description": "dataORM 是一个轻量级 ORM（对象关系映射）库，用于简化本地数据库的操作，提供了高效的数据库访问性能和低内存消耗。dataORM 支持多线程操作、链式调用、备份、升级、缓存等特性等功能。其设计理念是轻量、快速且易于使用，帮助开发者快速构建高性能的应用程序。",
+    "url": "https://github.com/mengfei0053/ohos_dataorm",
+    "homepage": null,
+    "stars": 0,
+    "forks": 0,
+    "open_issues": 0,
+    "default_branch": "main",
+    "created_at": "2025-12-29T03:04:12+00:00",
+    "updated_at": "2025-12-29T03:09:26+00:00",
+    "language": "TypeScript",
+    "license": "Apache License 2.0",
+    "topics": []
+  },
+  "readme": "# dataORM\n\n## Introduction\n\n>dataORM is a lightweight object relational mapping (ORM) library used to simplify operations on local databases, offering efficient database access performance and low memory consumption. dataORM supports multi-threading, chain calling, backup, upgrade, and caching. Designed for speed and simplicity, it helps you quickly build high-performance applications.\n\n## How to Install\n\n```\nohpm install @ohos/dataorm\n```\n\nOpenHarmony ohpm\nFor details about the environment configuration, see [OpenHarmony HAR](https://gitee.com/openharmony-tpc/docs/blob/master/OpenHarmony_har_usage.en.md).\n\n## How to Use\n\n1. Create an entity class, for example, **Note**.\n\n```\nimport { Id } from '@ohos/dataorm';\nimport { NotNull } from '@ohos/dataorm';\nimport { Entity, Columns } from '@ohos/dataorm';\nimport { Unique } from '@ohos/dataorm';\nimport { Index } from '@ohos/dataorm';\nimport { ToMany } from '@ohos/dataorm';\nimport { ColumnType } from '@ohos/dataorm';\nimport { ToOne } from '@ohos/dataorm';\n\n@Entity('NOTE')\nexport class Note {\n    @Id()\n    @Columns({ columnName: 'ID', types: ColumnType.num })\n    id: number;\n    @NotNull()\n    @Unique()\n    @Index(true)\n    @Columns({ columnName: 'TEXT', types: ColumnType.str })\n    text: string;\n    @Columns({ columnName: 'COMMENT', types: ColumnType.str })\n    comment: string;\n    @Columns({ columnName: 'DATE', types: ColumnType.str })\n    date: Date;\n    @Columns({ columnName: 'TYPE', types: ColumnType.str })\n    type: string;\n    @Columns({ columnName: 'MONEYS', types: ColumnType.real })\n    moneys: number;\n\n    // To-do: All non-static variables in the class must be declared in the constructor for reflection to generate columns.\n    constructor(id?: number, text?: string, comment?: string, date?: Date, types?: string, moneys?: number) {\n        this.id = id;\n        this.text = text;\n        this.comment = comment;\n        this.date = date;\n        this.type = types;\n        this.moneys = moneys;\n    }\n\n    getMoneys(): number {\n        return this.moneys;\n    }\n\n    setMoneys(moneys: number) {\n        this.moneys = moneys;\n    }\n\n    getId(): number {\n        return this.id;\n    }\n\n    setId(id: number) {\n        this.id = id;\n    }\n\n    getText(): string {\n        return this.text;\n    }\n\n    /** Not-null value; ensure this value is available before it is saved to the database. */\n    setText(text: string) {\n        this.text = text;\n    }\n\n    getComment(): string {\n        return this.comment;\n    }\n\n    setComment(comment: string) {\n        this.comment = comment;\n    }\n\n    getDate(): Date {\n        return this.date;\n    }\n\n    setDate(date: Date) {\n        this.date = date;\n    }\n\n    getType(): string {\n        return this.type;\n    }\n\n    setType(types: string) {\n        this.type = types;\n    }\n}\n```\n\n#### Provide annotations for exposure of the following: Column, Entity, Id, NotNull, Unique, Index, ToMany, ToOne, JoinEntity, OrderBy, Convert, Embedded, Transient, Union.\n\nExamples and explanations of how to use annotations:\n\n#### (1) Using Id\n\n1. Import\n\n```\nimport {Id} from '@ohos/dataorm'; \n```\n\n2. Use\n\nA.\n\n```\n@Id()\nid: number;\n```\n\nB.\n\n```\n@Id({ isPrimaryKey: true ,autoincrement:false})\nid: number;\n```\n\nNote: It is used in class properties to define the primary key of the table and whether the key value is auto-incrementing. The definitions of A and B are equivalent: **isPrimaryKey** is set to **true** (indicating it is a table primary key), and **autoincrement** is set to **false** (indicating that the key value does not auto-increment).\n\n#### (2) Using Entity\n\n1. Import\n\n```\nimport {Entity} from '@ohos/dataorm';\n```\n\n2. Use\n\n```\n@Entity('NOTE')\nexport  class Note {}\n```\n\nNote: It is used in class header files to define the table name. In this example, the table name is **NOTE**.\n\n#### (3) Using Column\n\n1. Import\n\n```\nimport {Columns} from '@ohos/dataorm';\n```\n\n2. Use\n\n```\n@Columns({ columnName: 'ID', types: ColumnType.num })\ntext: string;\n```\n\nNote: It is used in class properties to define the column name and data type in the table. The first parameter is the column name, and the second parameter is the column data type.\n\n#### (4) Using NotNull\n\n1. Import\n\n```\nimport {NotNull} from '@ohos/dataorm';\n```\n\n2. Use\n\nA.\n\n```\n@NotNull()\ntext: string;\n```\n\nB.\n\n```\n@NotNull(true)\ntext: string;\n```\n\nNote: It is used in class properties to define whether the table column can be null. If the value is **true**, the column must not be null. The definitions of A and B are equivalent: The column value must not be null.\n\n#### (5) Using Unique\n\n1. Import\n\n```\nimport {Unique} from '@ohos/dataorm';\n```\n\n2. Use\n\nA.\n\n```\n@Unique()\ntext: string;\n```\n\nB.\n\n```\n@Unique(true)\ntext: string;\n```\n\nNote: It is used in class properties to define whether the column value is unique in the table. If the value is **true**, the column value must be unique. The definitions of A and B are equivalent: The column value is unique.\n\n#### (6) Using Index\n\n1. Import\n\n```\nimport {Index} from '@ohos/dataorm';\n```\n\n2. Use\n\nA.\n\n```\n@Index()\ntext: string;\n```\n\nB.\n\n```\n@Index(true)\ntext: string;\n```\n\nC.\n\n```\n@Index(false)\ntext: string;\n```\n\nNote: It is used in class properties to define the column for creating an index table and whether the index is unique. If the value is **true**, the index is unique. A is defined as a non-unique index, B is defined as a unique index, and C is defined as a non-unique index. The definitions of A and C are the same.\n\n#### (7) Using ToMany\n\n1. Import\n\n```\nimport {  ToMany } from '@ohos/dataorm';\n```\n\n2. Use\n\n```\n@ToMany({ targetClsName: \"Student\", joinProperty: [{ name: \"ID\", referencedName: \"TID\" }] })\n@OrderBy(\"NAME ASC\")\nstudents: Array<Student>\n```\n\nNote: It is used in class properties to define the target relationship table **targetClsName**, the column **name** to be queried, and **referencedName** associated with the external target table.\nThe value of **name** is the value of the target **referencedName**.\nThe object array of the target table is returned.\n\nCall method:\n\n```\n  async queryByToManyFunctionTest() {\n    this.daoSession = GlobalContext.getContext().getValue(\"daoSession\") as DaoSession;\n    this.studentDao = this.daoSession.getBaseDao(Student);\n    var teacherId: string[] = [\"1\"]\n    let data = await this.studentDao.queryToManyListByColumnName(\"students\", teacherId)\n    data.forEach(element => {\n      console.info(\"-----tonMany-----\" + JSON.stringify(element))\n    });\n  }\n```\n\nNote: The Data Access Object (DAO) of the target table is obtained by calling **queryToManyListByColumnName(toManyColumnName: string, arr: string[])**.\nThe input parameter **toManyColumnName** is the variable name under @ToMany of the class created by the current table, and the input parameter **arr** is the query value of the associated column.\n\n#### (8) Using JoinEntity\n\n1. Import\n\n```\nimport { JoinEntity } from '@ohos/dataorm';\n```\n\n2. Use\n\n```\n@JoinEntity({ entityName: 'JoinManyToDateEntity', targetClsName: 'DateEntity',  sourceProperty: 'ID_TO_MANY', targetProperty: 'ID_DATE' })\n@OrderBy(\"ID DESC\")\ndateEntityList: Array<DateEntity>\n```\n\nNote: It is used in class properties to define the relationship between join tables. **entityName** indicates the entity class name of the join table, **targetClsName** indicates the entity class name of the target table,\n**sourceProperty** is the property name that contains the source (current) entity ID in the join entity,\nand **targetProperty** is the property name that contains the target entity ID in the join entity. The object array of the target table is returned.\n\nCall method:\n\n```\n  async queryByJoinEntityFunctionTest(){\n    this.daoSession = GlobalContext.getContext().getValue(\"daoSession\") as DaoSession;\n    this.studentDao = this.daoSession.getBaseDao(DateEntity);\n    var teacherId: string[] = [\"11\"]\n    let data = await this.studentDao.queryToManyListByColumnName(\"dateEntityList\", teacherId)\n    data.forEach(element => {\n      console.info(\"-----JoinEntity-----\" + JSON.stringify(element))\n    });\n  }\n```\n\nNote: The DAO of the target table is obtained by calling **queryToManyListByColumnName(toManyColumnName: string, arr: string[])**.\nThe input parameter **toManyColumnName** is the variable name under @ToMany of the class created by the current table, and the input parameter **arr** is the query value of the associated column.\n\n#### (9) Using ToOne\n\n1. Import\n\n```\nimport { ToOne } from '@ohos/dataorm';\n```\n\n2. Use\n\n```\n@ToOne({ value: 'TID', targetObj: Teacher })\nteacher: Teacher\n```\n\nNote: It is used in class properties to define the **value** of the current table as the column and **targetObj** as the class.\n\nCall method:\n\nA.\n\n```\nasync loadDeep() {\n   this.daoSession = GlobalContext.getContext().getValue(\"daoSession\") as DaoSession;\n   this.studentDao = this.daoSession.getBaseDao(Student);\n   let studentId =         1\n   let student: Student = await this.studentDao.loadDeep(studentId);\n}\n```\n\nB.\n\n```\nasync queryByToOneFunctionTest() {\n     this.daoSession = GlobalContext.getContext().getValue(\"daoSession\") as DaoSession;\n     this.studentDao = this.daoSession.getBaseDao(Student);\n     let columnName = this.studentDao.getPkProperty().columnName\n     let entityList = await this.studentDao.queryDeep(\"WHERE T.\" + columnName + \"=?\", [\"1\"]);\n     let entity3: Student = entityList[0];\n}\n```\n\nNote: Obtain the DAO of the target table and construct the SQL query string as a parameter for **queryDeep(where: string, selectionArg: string[])**.\n\n#### (10) Using Convert\n\n1. Import\n\n```\nimport { Convert } from '@ohos/dataorm';\n```\n\n2. Use\n\n```\n@Convert({ converter: TypeConvert, columnType: ColumnType.str })\nimages: ArrayList<string>;\n```\n\nNote: It is used in class properties to store and obtain the corresponding property set or array in the database. In @Convert, the **converter** inherits the **PropertyConverter** entity and implements its abstract method, and **columnType** corresponds to the type stored in the database.\n\nPropertyConverter description:\n| API                                      | Description                                          |\n| -------------------------------------------- | -------------------------------------------------- |\n| convertToEntityProperty(databaseValue: Q): P | Converts database data into a set or array.              |\n| convertToDatabaseValue(entityProperty: P): Q | Converts the set or array data in an object entity into a type suitable for database storage.|\n\n#### (11) Using Transient\n\n1. Import\n\n```\nimport { Transient } from '@ohos/dataorm';\n```\n\n2. Use\n\n```\n@Transient()\nhome: string\n```\nNote: Properties annotated with Transient are not mapped to the database.\n\n#### (12) Using Embedded\n\n1. Import\n\n```\nimport { Embedded } from '@ohos/dataorm';\n```\n\n2. Use\n\n```\n@Embedded({ prefix: \"f_\", targetClass: Father })\nfather: Father\n```\nNote: It supports data entity nesting and parameter description. **prefix** indicates the prefix added to the column name in the database and **targetClass** indicates the nested entity.\n\n#### (13) Using Union\n\n1. Import\n\n```\nimport { Union } from '@ohos/dataorm';\n```\n\n2. Use\n\n```\n@NotNull()\n@Union()\n@Columns({ columnName: \"FIRST_NAME\", types: ColumnType.str })\nfirstName: string;\n```\n\nNote: The key annotated with Union becomes one of the composite primary keys of the table.\n\n\n#### 1. Initializing Non-Encrypted Library in AbilityStage.ts\n\n ```\n\n let helper: ExampleOpeHelper = new ExampleOpenHelper(this.context, \"notes.db\");\n helper.setEntities(Note);\n let db: Database = await helper.getWritableDb();\n this.data.daoSession = new DaoMaster(db).newSession();\n ```\n\n#### 2. Initializing Encrypted Library in AbilityStage.ets\n\n ```\n let helper: ExampleOpenHelper = new ExampleOpenHelper(context, \"notes.db\");\n // Set the data encryption key, which cannot be changed after encryption. The encrypted and non-encrypted libraries cannot be switched. (A common database cannot be set as an encrypted library, and an encrypted library cannot be changed to a common library.)\n helper.setEncrypt(true);\n // Add all tables (new, modified, existing) to the global table.\n helper.setEntities(Note);\n let db: Database = await helper.getWritableDb();\n this.data.daoSession = new DaoMaster(db).newSession();\n ```\n\n#### 3. Obtaining daoSession and DAO from Index Page in Demo\n\n ```\nprivate aboutToAppear() {\n    daoSess =  GlobalContext.getContext().getValue(\"daoSession\") as DaoSession;\n    this.daoSession = daoSess;\n    noteDaos = this.daoSession.getBaseDao(Note);\n}\n ```\n\n#### 4. Adding and Removing a Listener\n\n ```\n /*\n   * Listener\n   */\n private tabListener(): OnTableChangedListener<any>{\n    return {\n      async onTableChanged(t: any, err, action: TableAction) {\n        if (action == TableAction.INSERT) {          \n          await this.updateNotes();\n        } else if(action == TableAction.UPDATE){\n          await this.updateNotes();\n        } else if(action == TableAction.DELETE){\n          await this.updateNotes();\n        } else if (action == TableAction.QUERY) {\n        }\n      }\n    }\n  }\n  /*\n   * Add a listener.\n   */\n  noteDaos.addTableChangedListener(this.tabListener());\n  \n  /**\n   * Remove the listener.\n   */\n  noteDaos.removeTableChangedListener();\n      \n ```\n\n#### 5. Operating Database\n\n```\n// Add\nlet date = new Date();\nlet comment = \"Added on \" + date.toLocaleString();\n\nlet note = new Note();\nnote.setText(this.noteText);\nnote.setComment(comment);\nnote.setDate(new Date());\nnote.setType(NoteType[NoteType.TEXT]);\nnoteDaos.insert(note);\n\n\n// Query\nlet entityClass = GlobalContext.getContext().getValue(GlobalContext.KEY_CLS) as Record<string, Object>;\nlet properties = entityClass.Note as Record<string, Property>;\nlet notesQuery = this.noteDao.queryBuilder().orderAsc(properties.text).build();\nthis.arr = await this.notesQuery.list();\n\nOr\n\nlet entityClass = GlobalContext.getContext().getValue(GlobalContext.KEY_CLS) as Record<string, Object>;\nlet properties = entityClass.Note as Record<string, Property>;\nlet query = this.noteDao.queryBuilder().orderAsc(properties.text).buildCursor();\nlet a = await query.list();\n\n\n// Delete\nlet entityClass = GlobalContext.getContext().getValue(GlobalContext.KEY_CLS) as Record<string, Object>;\nlet properties = entityClass.Note as Record<string, Property>;\nlet deleteQuery = this.noteDao.queryBuilder().where(properties.text.eq(\"bbb\"))\n  .buildDelete();\ndeleteQuery.executeDeleteWithoutDetachingEntities();\n```\n\n#### 6. Entity Inheritance\n\nYou can use the entity inheritance patterns to reduce code redundancy, enable code reuse, and improve program maintainability.\n\n1. Define a base class, place common properties in the base class, and mark them with **@Columns**.\n\n```\nimport { Columns, ColumnType } from '@ohos/dataorm';\n\nexport  class TableBasic {\n\n  @Columns({ columnName: \"CREATETIME\", types: ColumnType.str })\n  createTime: string;\n\n  getCreateTime(): string {\n    return this.createTime;\n  }\n  setCreateTime (createTime: string) {\n    this.createTime = createTime;\n  }\n\n  constructor(createTime?: string) {\n    this.createTime = createTime;\n  }\n}\n```\n\n2. Inherit the base class in the required service entity.\n\n```\n/**\n * Entity mapped to table \"NOTE\".\n */\nimport { Columns, ColumnType, Entity, Id, NotNull } from '@ohos/dataorm'\nimport { TableBasic } from './test/TableBasic'\n\n@Entity(\"NOTE\", [{ value: \"text, date DESC\", unique: true }])\nexport class Note extends TableBasic {\n  @Id()\n  @Columns({ columnName: \"ID\", types: ColumnType.num })\n  id: number\n  @NotNull()\n  @Columns({ columnName: \"TEXT\", types: ColumnType.str })\n  text: string\n  @Columns({ columnName: \"COMMENT\", types: ColumnType.str })\n  comment: string\n  @Columns({ columnName: \"DATE\", types: ColumnType.str })\n  date: string\n  @Columns({ columnName: \"TYPE\", types: ColumnType.str })\n  type: string\n  @Columns({ columnName: \"MONEYS\", types: ColumnType.real })\n  moneys: number\n\n  constructor(\n    id?: number,\n    text?: string,\n    comment?: string,\n    date?: string,\n    types?: string,\n    moneys?: number,\n    createTime?: string,\n  ) {\n    super(createTime)\n    this.id = id\n    this.text = text\n    this.comment = comment\n    this.date = date\n    this.type = types\n    this.moneys = moneys\n  }\n\n}\n\n```\n\nThe obtained **NOTE** instance can inherit the **CreateTime** property.\n\n#### 7. Multiple Databases\nYou can create multiple databases. The database names must be unique.\n\n1. Regular SQLite database.\n\n``` \n    let helper: ExampleOpenHelper =  new ExampleOpenHelper(this.context, \"notes2.db\", \"customDir\");\n    let helper2: ExampleOpenHelper = new ExampleOpenHelper2(this.context, \"notes3.db\");\n```\n2. Add all tables (new, modified, existing) to the global table.\n\n``` \n\n  helper.setEntities(Note, Teacher, JoinManyToDateEntity, DateEntity, Book, Student ,\n  Chapter, Topics, User, ConvertInfo, CreateInDBInfo, JoinPropertyUser, Customer, OnePlus);\n  helper2.setEntities (Note, Teacher, JoinManyToDateEntity, DateEntity, Book, Student ,\n  Chapter, Topics, User, ConvertInfo, CreateInDBInfo, JoinPropertyUser, Customer, OnePlus);\n```\n\n3. Add a name to the database or customize a path.\n\n``` \n let db: Database = await helper.getWritableDb();\n let db2: Database = await helper2.getWritableDb();\n db.name = \"notes2.db\";\n db.customDir = \"customDir\";\n db2.name = \"notes3.db\";\n```\n\n4. Create and read database keys and set the corresponding DAO.\n\n``` \n GlobalContext.getContext().setValue(\"daoSession2\", new DaoMaster(db).newSession());\n GlobalContext.getContext().setValue(\"daoSession3\", new DaoMaster(db2).newSession());\n```\n\n5. Read the database and create a table for the specified database.\n\n``` \n his.daoSession1 = GlobalContext.getContext().getValue(\"daoSession2\") as DaoSession;\n his.noteDao1 = this.daoSession1.getBaseDao(ConvertInfo);\n```\n\n## Configuration\n1. Log configuration\n```ts\nlet helper: ExampleOpenHelper = new ExampleOpenHelper(this.context, \"notes.db\");\nhelper.setLogger(true)\n```\n\n2. Trace configuration\n```ts\nimport { DaoTraceSpace } from '@ohos/dataorm'\n\nlet helper: ExampleOpenHelper = new ExampleOpenHelper(this.context, \"notes.db\");\nhelper.setTrace({\n    enabled: true, // enable trace\n    minLevel: DaoTraceSpace.TraceLevel.INFO,  // The trace level of the record. The lower the level, the more frequent the record.\n    types: new Set([DaoTraceSpace.TraceType.CRUD]) // The type of trace will be recorded\n});\n```\n3. Auto Migrate\n> When the Version number of the Version is greater than the previous version and there is a change in the table field, the database upgrade logic will be automatically executed. When the table structure is upgraded without change, it will be ignored. You can cancel the automatic upgrade (default off) by calling the setAutoMigrate(false) method.\n\n```ts\nlet helper: ExampleOpenHelper = new ExampleOpenHelper(this.context, \"notes.db\");\nawait helper.setVersion(newVersion)\nawait helper.setAutoMigrate(true)\n```\n\n## Available APIs\n\nAPI Preparation\n\n``` \n   // Regular SQLite database\n   // The third parameter customDir indicates the custom database path. If this parameter is left blank, the RdbStore instance is created in the sandbox directory of the application by default.\n   let helper: ExampleOpenHelper = new ExampleOpenHelper(this.context, \"notes.db\", \"customDir\");\n   // Set the data encryption key, which cannot be changed after encryption. The encrypted and non-encrypted libraries cannot be switched. (A common database cannot be set as an encrypted library, and an encrypted library cannot be changed to a common library.)\n   helper.setEncrypt(true);\n   // Add all tables (new, modified, existing) to the global table.\n   helper.setEntities(Note, Student, Teacher, JoinManyToDateEntity, DateEntity);\n   let db: Database = await helper.getWritableDb();\n```\n\n1. Adds\n   `noteDao.insert(note)/noteDao.insertSync(note)`\n2. Modifies\n   `noteDao.update(note)/noteDao.updateSync(note)`\n3. Deletes\n   `noteDao.delete(note)/noteDao.deleteAsync(notte)/noteDao.deleteSync(note)`\n4. Deletes the primary key.\n   `noteDao.deleteByKey(id)/noteDao.deleteByKeyAsync(id)/noteDao.deleteByKeySync(id)`\n5. Deletes the condition.\n   `noteDao.queryBuilder().where(properties['text'].eq(\"bbb\")).buildDelete()`\n6. Performs a query.\n   `noteDao.queryBuilder().list()/noteDao.queryBuilder().listSync()`\n7. Queries the condition.\n   `noteDao.queryBuilder.whereOr(properties['text'].eq(\"aaa\"), properties['text'].eq(\"bbb\"), properties['text'].eq(\"ccc\")).list()`\n8. Queries the cache.\n   `noteDao.load(id)/noteDao.loadSync(id)`\n9. Updates data. Resets all locally changed attributes of an entity by reloading values from the database.\n   `noteDao.refresh(note)/noteDao.refreshSync(note)`\n10. Queries the chain.\n    `new inquiry().from(Note).query(Note).then((data) => { if(data)this.arr = data; })`\n11. Queries the chain condition.\n    `inquiry().from(Note).eq(\"ID\", 2).querySingle(Note).then((data) => {if(data) this.arr = data; })`\n12. Adds a listener.\n    `noteDao.addTableChangedListener()`\n13. Removes the listener.\n    `noteDao.removeTableChangedListener()`\n14. Saves (adds or updates)\n    `noteDao.save(note)/noteDao.saveAsync(note)/noteDao.saveSync(note)`\n15. Backs up the database.\n    `Migration.backupDB(dbName, tableName, version, context)`\n16. Upgrades the database.\n    `migration.execute(context)`\n17. Imports data from resource files to the database.\n    `executeSqlScript(resourceMgr: any, db: Database, rawFilename: string)`\n18. Executes raw SQL queries.\n    `rawQueries(sql: string, selectionArgs: Array<any>)/rawQueriesSync(sql: string, selectionArgs: Array<any>)`\n19. Performs a many-to-many query.\n    `queryToManyListByColumnName(toManyColumnName: string, arr: string[])/queryToManyListByColumnNameSync(toManyColumnName: string, arr: string[])`\n20. Queries JoinEntity.\n    `queryToManyListByColumnName(toManyColumnName: string, arr: string[])/queryToManyListByColumnNameSync(toManyColumnName: string, arr: string[])`\n21. Performs a deep query.\n    `queryDeep(where: string, selectionArg: string[])/queryDeepSync(where: string, selectionArg: string[])`\n\nFor details about unit test cases, see [TEST.md](https://gitcode.com/openharmony-sig/ohos_dataorm/blob/master/TEST.md).\n\n## About obfuscation\n- Code obfuscation, please see[Code Obfuscation](https://docs.openharmony.cn/pages/v5.0/zh-cn/application-dev/arkts-utils/source-obfuscation.md).\n- If you want the zxing library not to be obfuscated during code obfuscation, you need to add corresponding exclusion rules in the obfuscation rule configuration file obfuscation-rules.txt：\n```\n-keep\n./oh_modules/@ohos/datorm\n```\n\n## Constraints\n\n- DevEco Studio: 4.1 Release (4.1.3.317), SDK: API 11 (4.1.0.36).\n\n- DevEco Studio: 4.0 Release (4.0.3.513), SDK: API 10 (4.0.10.10).\n\n- DevEco Studio: 4.0 Release (4.0.3.418), OpenHarmony SDK: (4.0.10.6).\n\n## Directory Structure\n\n```\n|---- dataORM  \n|     |---- entry  # Sample code\n|     |---- library  # dataORM library\n|               |----annotation # Annotations\n|               |----common # Common class package\n|               |----converter # convert annotations\n|               |----database # Database\n|               |----dbflow # Chain query\n|                   |----base # Chain encapsulation\n|                   |----listener # Listener callback\n|               |----identityscope # Cache\n|               |----internal # Internal call file\n|               |----query # Query\n|           |---- index.ts  # External APIs\n|     |---- README.MD  # Readme\n```\n\n## How to Contribute\n\nIf you find any problem when using the project, submit an [issue](https://gitcode.com/openharmony-sig/ohos_dataorm/issues) or\na [PR](https://gitcode.com/openharmony-sig/ohos_dataorm/pulls).\n\n## License\n\nThis project is licensed under [Apache License 2.0](https://gitcode.com/openharmony-sig/ohos_dataorm/blob/master/LICENSE).\n\n## Known Issues\n\n1. The update and creation of the **save(entity: T)** and **insertOrReplace(entity: T)** APIs in the **AbstractDao** class are not supported in API version 9.\n",
+  "file_tree": [
+    {
+      "path": ".eslintignore",
+      "type": "file",
+      "size": 24
+    },
+    {
+      "path": ".gitee",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": ".gitignore",
+      "type": "file",
+      "size": 158
+    },
+    {
+      "path": "AppScope",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "CHANGELOG.md",
+      "type": "file",
+      "size": 6061
+    },
+    {
+      "path": "COMMITTERS.md",
+      "type": "file",
+      "size": 233
+    },
+    {
+      "path": "LICENSE",
+      "type": "file",
+      "size": 11357
+    },
+    {
+      "path": "NOTICE",
+      "type": "file",
+      "size": 1280
+    },
+    {
+      "path": "OAT.xml",
+      "type": "file",
+      "size": 7245
+    },
+    {
+      "path": "README.OpenSource",
+      "type": "file",
+      "size": 376
+    },
+    {
+      "path": "README.md",
+      "type": "file",
+      "size": 23941
+    },
+    {
+      "path": "README_zh.md",
+      "type": "file",
+      "size": 22533
+    },
+    {
+      "path": "TEST.md",
+      "type": "file",
+      "size": 1261
+    },
+    {
+      "path": "build-profile.json5",
+      "type": "file",
+      "size": 480
+    },
+    {
+      "path": "entry",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "gif",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "hvigor",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "hvigorfile.ts",
+      "type": "file",
+      "size": 159
+    },
+    {
+      "path": "hvigorw",
+      "type": "file",
+      "size": 1419
+    },
+    {
+      "path": "hvigorw.bat",
+      "type": "file",
+      "size": 1449
+    },
+    {
+      "path": "library",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "oh-package.json5",
+      "type": "file",
+      "size": 342
+    },
+    {
+      "path": ".gitee/ISSUE_TEMPLATE.zh-CN.md",
+      "type": "file",
+      "size": 79
+    },
+    {
+      "path": ".gitee/ISSUE_TEMPLATE",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": ".gitee/PULL_REQUEST_TEMPLATE.zh-CN.md",
+      "type": "file",
+      "size": 1310
+    },
+    {
+      "path": "AppScope/app.json5",
+      "type": "file",
+      "size": 251
+    },
+    {
+      "path": "AppScope/resources",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "entry/.gitignore",
+      "type": "file",
+      "size": 36
+    },
+    {
+      "path": "entry/build-profile.json5",
+      "type": "file",
+      "size": 420
+    },
+    {
+      "path": "entry/hvigorfile.ts",
+      "type": "file",
+      "size": 160
+    },
+    {
+      "path": "entry/obfuscation-rules.txt",
+      "type": "file",
+      "size": 1042
+    },
+    {
+      "path": "entry/oh-package.json5",
+      "type": "file",
+      "size": 344
+    },
+    {
+      "path": "entry/src",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "gif/sample.gif",
+      "type": "file",
+      "size": 10399546
+    },
+    {
+      "path": "hvigor/hvigor-config.json5",
+      "type": "file",
+      "size": 92
+    },
+    {
+      "path": "hvigor/hvigor-wrapper.js",
+      "type": "file",
+      "size": 149352
+    },
+    {
+      "path": "library/.gitignore",
+      "type": "file",
+      "size": 36
+    },
+    {
+      "path": "library/build-profile.json5",
+      "type": "file",
+      "size": 109
+    },
+    {
+      "path": "library/hvigorfile.ts",
+      "type": "file",
+      "size": 159
+    },
+    {
+      "path": "library/index.ts",
+      "type": "file",
+      "size": 2897
+    },
+    {
+      "path": "library/oh-package.json5",
+      "type": "file",
+      "size": 590
+    },
+    {
+      "path": "library/src",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": ".gitee/ISSUE_TEMPLATE/bug-report.yml",
+      "type": "file",
+      "size": 1506
+    },
+    {
+      "path": ".gitee/ISSUE_TEMPLATE/config.yml",
+      "type": "file",
+      "size": 27
+    },
+    {
+      "path": ".gitee/ISSUE_TEMPLATE/feature-request.yml",
+      "type": "file",
+      "size": 640
+    },
+    {
+      "path": ".gitee/ISSUE_TEMPLATE/question.yml",
+      "type": "file",
+      "size": 407
+    },
+    {
+      "path": ".gitee/ISSUE_TEMPLATE/security-issue.yml",
+      "type": "file",
+      "size": 1916
+    },
+    {
+      "path": "AppScope/resources/base",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "entry/src/main",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "entry/src/ohosTest",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "library/src/main",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "AppScope/resources/base/element",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "AppScope/resources/base/media",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "entry/src/main/ets",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "entry/src/main/module.json5",
+      "type": "file",
+      "size": 1002
+    },
+    {
+      "path": "entry/src/main/resources",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "entry/src/ohosTest/ets",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "entry/src/ohosTest/module.json5",
+      "type": "file",
+      "size": 908
+    },
+    {
+      "path": "entry/src/ohosTest/resources",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "library/src/main/ets",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "library/src/main/module.json5",
+      "type": "file",
+      "size": 164
+    },
+    {
+      "path": "library/src/main/resources",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "AppScope/resources/base/element/string.json",
+      "type": "file",
+      "size": 85
+    },
+    {
+      "path": "AppScope/resources/base/media/app_icon.png",
+      "type": "file",
+      "size": 6790
+    },
+    {
+      "path": "entry/src/main/ets/entryability",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "entry/src/main/ets/pages",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "entry/src/main/ets/utils",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "entry/src/main/resources/base",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "entry/src/main/resources/en_US",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "entry/src/main/resources/rawfile",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "entry/src/main/resources/zh_CN",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "entry/src/ohosTest/ets/test",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "entry/src/ohosTest/ets/testability",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "entry/src/ohosTest/ets/testrunner",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "entry/src/ohosTest/resources/base",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "library/src/main/ets/core",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "library/src/main/resources/base",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "library/src/main/resources/en_US",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "library/src/main/resources/zh_CN",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "entry/src/main/ets/entryability/EntryAbility.ets",
+      "type": "file",
+      "size": 5640
+    },
+    {
+      "path": "entry/src/main/ets/pages/Classes.ts",
+      "type": "file",
+      "size": 1781
+    },
+    {
+      "path": "entry/src/main/ets/pages/CompositePrimaryKey.ets",
+      "type": "file",
+      "size": 5207
+    },
+    {
+      "path": "entry/src/main/ets/pages/ConvertPage.ets",
+      "type": "file",
+      "size": 4610
+    },
+    {
+      "path": "entry/src/main/ets/pages/DateEntity.ts",
+      "type": "file",
+      "size": 1241
+    },
+    {
+      "path": "entry/src/main/ets/pages/EmbedPage.ets",
+      "type": "file",
+      "size": 5046
+    },
+    {
+      "path": "entry/src/main/ets/pages/ExampleOpenHelper.ts",
+      "type": "file",
+      "size": 1523
+    },
+    {
+      "path": "entry/src/main/ets/pages/ExampleOpenHelper2.ts",
+      "type": "file",
+      "size": 1316
+    },
+    {
+      "path": "entry/src/main/ets/pages/ExtendsPage.ets",
+      "type": "file",
+      "size": 8239
+    },
+    {
+      "path": "entry/src/main/ets/pages/Index.ets",
+      "type": "file",
+      "size": 11724
+    },
+    {
+      "path": "entry/src/main/ets/pages/InsertPage.ets",
+      "type": "file",
+      "size": 5863
+    },
+    {
+      "path": "entry/src/main/ets/pages/JoinManyToDateEntity.ts",
+      "type": "file",
+      "size": 1190
+    },
+    {
+      "path": "entry/src/main/ets/pages/MuktiDataViewlibrary.ets",
+      "type": "file",
+      "size": 10214
+    },
+    {
+      "path": "entry/src/main/ets/pages/Note.ts",
+      "type": "file",
+      "size": 2376
+    },
+    {
+      "path": "entry/src/main/ets/pages/NoteType.ts",
+      "type": "file",
+      "size": 675
+    },
+    {
+      "path": "entry/src/main/ets/pages/ObservedAndDataPage.ets",
+      "type": "file",
+      "size": 5592
+    },
+    {
+      "path": "entry/src/main/ets/pages/ObservedAndDataSecPage.ets",
+      "type": "file",
+      "size": 3778
+    },
+    {
+      "path": "entry/src/main/ets/pages/ObservedSinglePage.ets",
+      "type": "file",
+      "size": 2846
+    },
+    {
+      "path": "entry/src/main/ets/pages/ObservedToManyPage.ets",
+      "type": "file",
+      "size": 4013
+    },
+    {
+      "path": "entry/src/main/ets/pages/ObservedToOnePage.ets",
+      "type": "file",
+      "size": 3060
+    },
+    {
+      "path": "entry/src/main/ets/pages/SavePage.ets",
+      "type": "file",
+      "size": 5951
+    },
+    {
+      "path": "entry/src/main/ets/pages/Student.ts",
+      "type": "file",
+      "size": 1939
+    },
+    {
+      "path": "entry/src/main/ets/pages/SyncApi.ets",
+      "type": "file",
+      "size": 15135
+    },
+    {
+      "path": "entry/src/main/ets/pages/Teacher.ts",
+      "type": "file",
+      "size": 2081
+    },
+    {
+      "path": "entry/src/main/ets/pages/UnionPrimaryKey.ets",
+      "type": "file",
+      "size": 3366
+    },
+    {
+      "path": "entry/src/main/ets/pages/annotation.ets",
+      "type": "file",
+      "size": 6795
+    },
+    {
+      "path": "entry/src/main/ets/pages/convert",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "entry/src/main/ets/pages/customDir.ets",
+      "type": "file",
+      "size": 3707
+    },
+    {
+      "path": "entry/src/main/ets/pages/embed",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "entry/src/main/ets/pages/entry",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "entry/src/main/ets/pages/home.ets",
+      "type": "file",
+      "size": 3531
+    },
+    {
+      "path": "entry/src/main/ets/pages/test",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "entry/src/main/ets/pages/toolbar.ets",
+      "type": "file",
+      "size": 2194
+    },
+    {
+      "path": "entry/src/main/ets/pages/upgrade.ets",
+      "type": "file",
+      "size": 11815
+    },
+    {
+      "path": "entry/src/main/ets/pages/util.ts",
+      "type": "file",
+      "size": 1284
+    },
+    {
+      "path": "entry/src/main/ets/utils/LogUtil.ts",
+      "type": "file",
+      "size": 1374
+    },
+    {
+      "path": "entry/src/main/ets/utils/TaskTime.ts",
+      "type": "file",
+      "size": 2133
+    },
+    {
+      "path": "entry/src/main/resources/base/element",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "entry/src/main/resources/base/media",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "entry/src/main/resources/base/profile",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "entry/src/main/resources/en_US/element",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "entry/src/main/resources/rawfile/add_student_teacher.sql",
+      "type": "file",
+      "size": 1383
+    },
+    {
+      "path": "entry/src/main/resources/rawfile/minimal-entity.sql",
+      "type": "file",
+      "size": 217
+    },
+    {
+      "path": "entry/src/main/resources/rawfile/minimal-entity.sql1",
+      "type": "file",
+      "size": 282
+    },
+    {
+      "path": "entry/src/main/resources/zh_CN/element",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "entry/src/ohosTest/ets/test/Ability.test.ets",
+      "type": "file",
+      "size": 34736
+    },
+    {
+      "path": "entry/src/ohosTest/ets/test/Annotation.test.ets",
+      "type": "file",
+      "size": 4370
+    },
+    {
+      "path": "entry/src/ohosTest/ets/test/CTXInstance.ts",
+      "type": "file",
+      "size": 1075
+    },
+    {
+      "path": "entry/src/ohosTest/ets/test/ExampleOpenHelper.ts",
+      "type": "file",
+      "size": 1417
+    },
+    {
+      "path": "entry/src/ohosTest/ets/test/List.test.ets",
+      "type": "file",
+      "size": 921
+    },
+    {
+      "path": "entry/src/ohosTest/ets/test/Note.test.ets",
+      "type": "file",
+      "size": 10703
+    },
+    {
+      "path": "entry/src/ohosTest/ets/test/SyncApiTest.test.ets",
+      "type": "file",
+      "size": 10681
+    },
+    {
+      "path": "entry/src/ohosTest/ets/testability/TestAbility.ets",
+      "type": "file",
+      "size": 3026
+    },
+    {
+      "path": "entry/src/ohosTest/ets/testability/pages",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "entry/src/ohosTest/ets/testrunner/OpenHarmonyTestRunner.ts",
+      "type": "file",
+      "size": 2746
+    },
+    {
+      "path": "entry/src/ohosTest/resources/base/element",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "entry/src/ohosTest/resources/base/media",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "entry/src/ohosTest/resources/base/profile",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "library/src/main/ets/core/AbstractDao.ts",
+      "type": "file",
+      "size": 84563
+    },
+    {
+      "path": "library/src/main/ets/core/AbstractDaoMaster.ts",
+      "type": "file",
+      "size": 2207
+    },
+    {
+      "path": "library/src/main/ets/core/AbstractDaoSession.ts",
+      "type": "file",
+      "size": 7135
+    },
+    {
+      "path": "library/src/main/ets/core/BaseDao.ts",
+      "type": "file",
+      "size": 26279
+    },
+    {
+      "path": "library/src/main/ets/core/ColumnType.ts",
+      "type": "file",
+      "size": 1460
+    },
+    {
+      "path": "library/src/main/ets/core/DaoException.ts",
+      "type": "file",
+      "size": 1443
+    },
+    {
+      "path": "library/src/main/ets/core/DaoLog.ts",
+      "type": "file",
+      "size": 3057
+    },
+    {
+      "path": "library/src/main/ets/core/DaoMaster.ts",
+      "type": "file",
+      "size": 7320
+    },
+    {
+      "path": "library/src/main/ets/core/DaoSession.ts",
+      "type": "file",
+      "size": 2657
+    },
+    {
+      "path": "library/src/main/ets/core/DbUtils.ts",
+      "type": "file",
+      "size": 3809
+    },
+    {
+      "path": "library/src/main/ets/core/GlobalContext.ts",
+      "type": "file",
+      "size": 1748
+    },
+    {
+      "path": "library/src/main/ets/core/InternalQueryDaoAccess.ts",
+      "type": "file",
+      "size": 1679
+    },
+    {
+      "path": "library/src/main/ets/core/InternalUnitTestDaoAccess.ts",
+      "type": "file",
+      "size": 2074
+    },
+    {
+      "path": "library/src/main/ets/core/Property.ts",
+      "type": "file",
+      "size": 7843
+    },
+    {
+      "path": "library/src/main/ets/core/StorageUtils.ts",
+      "type": "file",
+      "size": 2440
+    },
+    {
+      "path": "library/src/main/ets/core/StringBuilder.ts",
+      "type": "file",
+      "size": 1036
+    },
+    {
+      "path": "library/src/main/ets/core/Unit8ArrayUtils.ts",
+      "type": "file",
+      "size": 3519
+    },
+    {
+      "path": "library/src/main/ets/core/annotation",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "library/src/main/ets/core/common",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "library/src/main/ets/core/converter",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "library/src/main/ets/core/database",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "library/src/main/ets/core/dbflow",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "library/src/main/ets/core/entity",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "library/src/main/ets/core/identityscope",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "library/src/main/ets/core/internal",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "library/src/main/ets/core/query",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "library/src/main/ets/core/trace",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "library/src/main/resources/base/element",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "library/src/main/resources/en_US/element",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "library/src/main/resources/zh_CN/element",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "entry/src/main/ets/pages/convert/ConvertInfo.ts",
+      "type": "file",
+      "size": 1121
+    },
+    {
+      "path": "entry/src/main/ets/pages/convert/TypeConvert.ts",
+      "type": "file",
+      "size": 1575
+    },
+    {
+      "path": "entry/src/main/ets/pages/embed/ChildInfo.ts",
+      "type": "file",
+      "size": 1226
+    },
+    {
+      "path": "entry/src/main/ets/pages/embed/ChildTwo.ts",
+      "type": "file",
+      "size": 1269
+    },
+    {
+      "path": "entry/src/main/ets/pages/embed/CreateInDBInfo.ts",
+      "type": "file",
+      "size": 1049
+    },
+    {
+      "path": "entry/src/main/ets/pages/embed/Father.ts",
+      "type": "file",
+      "size": 1091
+    },
+    {
+      "path": "entry/src/main/ets/pages/embed/Mother.ts",
+      "type": "file",
+      "size": 1397
+    },
+    {
+      "path": "entry/src/main/ets/pages/embed/SunInfo.ts",
+      "type": "file",
+      "size": 1062
+    },
+    {
+      "path": "entry/src/main/ets/pages/embed/SunInfoTwo.ts",
+      "type": "file",
+      "size": 1083
+    },
+    {
+      "path": "entry/src/main/ets/pages/embed/User.ts",
+      "type": "file",
+      "size": 1557
+    },
+    {
+      "path": "entry/src/main/ets/pages/entry/Book.ts",
+      "type": "file",
+      "size": 1370
+    },
+    {
+      "path": "entry/src/main/ets/pages/entry/Chapter.ts",
+      "type": "file",
+      "size": 1417
+    },
+    {
+      "path": "entry/src/main/ets/pages/entry/Observed",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "entry/src/main/ets/pages/entry/One.ts",
+      "type": "file",
+      "size": 1490
+    },
+    {
+      "path": "entry/src/main/ets/pages/entry/OnePlus.ts",
+      "type": "file",
+      "size": 1111
+    },
+    {
+      "path": "entry/src/main/ets/pages/entry/People.ts",
+      "type": "file",
+      "size": 1177
+    },
+    {
+      "path": "entry/src/main/ets/pages/entry/Phone.ts",
+      "type": "file",
+      "size": 1198
+    },
+    {
+      "path": "entry/src/main/ets/pages/entry/Topics.ts",
+      "type": "file",
+      "size": 1245
+    },
+    {
+      "path": "entry/src/main/ets/pages/entry/joinProperty",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "entry/src/main/ets/pages/test/Student.ets",
+      "type": "file",
+      "size": 1059
+    },
+    {
+      "path": "entry/src/main/ets/pages/test/TableBasic.ts",
+      "type": "file",
+      "size": 991
+    },
+    {
+      "path": "entry/src/main/resources/base/element/color.json",
+      "type": "file",
+      "size": 98
+    },
+    {
+      "path": "entry/src/main/resources/base/element/string.json",
+      "type": "file",
+      "size": 5831
+    },
+    {
+      "path": "entry/src/main/resources/base/media/back.png",
+      "type": "file",
+      "size": 3927
+    },
+    {
+      "path": "entry/src/main/resources/base/media/icon.png",
+      "type": "file",
+      "size": 6790
+    },
+    {
+      "path": "entry/src/main/resources/base/profile/main_pages.json",
+      "type": "file",
+      "size": 522
+    },
+    {
+      "path": "entry/src/main/resources/en_US/element/string.json",
+      "type": "file",
+      "size": 249
+    },
+    {
+      "path": "entry/src/main/resources/zh_CN/element/string.json",
+      "type": "file",
+      "size": 5732
+    },
+    {
+      "path": "entry/src/ohosTest/ets/testability/pages/Index.ets",
+      "type": "file",
+      "size": 1461
+    },
+    {
+      "path": "entry/src/ohosTest/resources/base/element/color.json",
+      "type": "file",
+      "size": 98
+    },
+    {
+      "path": "entry/src/ohosTest/resources/base/element/string.json",
+      "type": "file",
+      "size": 266
+    },
+    {
+      "path": "entry/src/ohosTest/resources/base/media/icon.png",
+      "type": "file",
+      "size": 6790
+    },
+    {
+      "path": "entry/src/ohosTest/resources/base/profile/test_pages.json",
+      "type": "file",
+      "size": 49
+    },
+    {
+      "path": "library/src/main/ets/core/annotation/Column.ts",
+      "type": "file",
+      "size": 1685
+    },
+    {
+      "path": "library/src/main/ets/core/annotation/Convert.ts",
+      "type": "file",
+      "size": 1300
+    },
+    {
+      "path": "library/src/main/ets/core/annotation/Embedded.ts",
+      "type": "file",
+      "size": 959
+    },
+    {
+      "path": "library/src/main/ets/core/annotation/Entity.ts",
+      "type": "file",
+      "size": 1064
+    },
+    {
+      "path": "library/src/main/ets/core/annotation/Id.ts",
+      "type": "file",
+      "size": 1281
+    },
+    {
+      "path": "library/src/main/ets/core/annotation/Index.ts",
+      "type": "file",
+      "size": 992
+    },
+    {
+      "path": "library/src/main/ets/core/annotation/JoinEntity.ts",
+      "type": "file",
+      "size": 1022
+    },
+    {
+      "path": "library/src/main/ets/core/annotation/NotNull.ts",
+      "type": "file",
+      "size": 1100
+    },
+    {
+      "path": "library/src/main/ets/core/annotation/ToMany.ts",
+      "type": "file",
+      "size": 1347
+    },
+    {
+      "path": "library/src/main/ets/core/annotation/ToOne.ts",
+      "type": "file",
+      "size": 957
+    },
+    {
+      "path": "library/src/main/ets/core/annotation/Transient.ts",
+      "type": "file",
+      "size": 928
+    },
+    {
+      "path": "library/src/main/ets/core/annotation/Union.ts",
+      "type": "file",
+      "size": 970
+    },
+    {
+      "path": "library/src/main/ets/core/annotation/Unique.ts",
+      "type": "file",
+      "size": 1427
+    },
+    {
+      "path": "library/src/main/ets/core/annotation/Util.ts",
+      "type": "file",
+      "size": 2462
+    },
+    {
+      "path": "library/src/main/ets/core/common/JList.ts",
+      "type": "file",
+      "size": 2952
+    },
+    {
+      "path": "library/src/main/ets/core/common/JMap.ts",
+      "type": "file",
+      "size": 4749
+    },
+    {
+      "path": "library/src/main/ets/core/common/Queue.ts",
+      "type": "file",
+      "size": 1679
+    },
+    {
+      "path": "library/src/main/ets/core/converter/ConvertParameter.ts",
+      "type": "file",
+      "size": 953
+    },
+    {
+      "path": "library/src/main/ets/core/converter/PropertyConverter.ts",
+      "type": "file",
+      "size": 922
+    },
+    {
+      "path": "library/src/main/ets/core/database/Database.ts",
+      "type": "file",
+      "size": 2321
+    },
+    {
+      "path": "library/src/main/ets/core/database/DatabaseOpenHelper.ts",
+      "type": "file",
+      "size": 7970
+    },
+    {
+      "path": "library/src/main/ets/core/database/DatabaseStatement.ts",
+      "type": "file",
+      "size": 1830
+    },
+    {
+      "path": "library/src/main/ets/core/database/SQLiteOpenHelper.ts",
+      "type": "file",
+      "size": 3651
+    },
+    {
+      "path": "library/src/main/ets/core/database/SQLiteStatement.ts",
+      "type": "file",
+      "size": 7129
+    },
+    {
+      "path": "library/src/main/ets/core/database/StandardDatabase.ts",
+      "type": "file",
+      "size": 5181
+    },
+    {
+      "path": "library/src/main/ets/core/database/StandardDatabaseStatement.ts",
+      "type": "file",
+      "size": 2790
+    },
+    {
+      "path": "library/src/main/ets/core/dbflow/Migration.ts",
+      "type": "file",
+      "size": 7102
+    },
+    {
+      "path": "library/src/main/ets/core/dbflow/base",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "library/src/main/ets/core/dbflow/listener",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "library/src/main/ets/core/entity/Entity.ts",
+      "type": "file",
+      "size": 1164
+    },
+    {
+      "path": "library/src/main/ets/core/entity/ToManyEntity.ts",
+      "type": "file",
+      "size": 877
+    },
+    {
+      "path": "library/src/main/ets/core/entity/ToManyWithJoinEntity.ts",
+      "type": "file",
+      "size": 775
+    },
+    {
+      "path": "library/src/main/ets/core/entity/ToOneEntity.ts",
+      "type": "file",
+      "size": 871
+    },
+    {
+      "path": "library/src/main/ets/core/identityscope/IdentityScope.ts",
+      "type": "file",
+      "size": 953
+    },
+    {
+      "path": "library/src/main/ets/core/identityscope/IdentityScopeLong.ts",
+      "type": "file",
+      "size": 2369
+    },
+    {
+      "path": "library/src/main/ets/core/identityscope/IdentityScopeObject.ts",
+      "type": "file",
+      "size": 2142
+    },
+    {
+      "path": "library/src/main/ets/core/identityscope/IdentityScopeType.ts",
+      "type": "file",
+      "size": 794
+    },
+    {
+      "path": "library/src/main/ets/core/internal/DaoConfig.ts",
+      "type": "file",
+      "size": 4766
+    },
+    {
+      "path": "library/src/main/ets/core/internal/SqlUtils.ts",
+      "type": "file",
+      "size": 4638
+    },
+    {
+      "path": "library/src/main/ets/core/internal/TableStatements.ts",
+      "type": "file",
+      "size": 4429
+    },
+    {
+      "path": "library/src/main/ets/core/query/AbstractCondition.ts",
+      "type": "file",
+      "size": 1710
+    },
+    {
+      "path": "library/src/main/ets/core/query/AbstractQuery.ts",
+      "type": "file",
+      "size": 2841
+    },
+    {
+      "path": "library/src/main/ets/core/query/AbstractQueryData.ts",
+      "type": "file",
+      "size": 1513
+    },
+    {
+      "path": "library/src/main/ets/core/query/AbstractQueryWithLimit.ts",
+      "type": "file",
+      "size": 2649
+    },
+    {
+      "path": "library/src/main/ets/core/query/CountQuery.ts",
+      "type": "file",
+      "size": 3231
+    },
+    {
+      "path": "library/src/main/ets/core/query/CursorQuery.ts",
+      "type": "file",
+      "size": 4555
+    },
+    {
+      "path": "library/src/main/ets/core/query/DeleteQuery.ts",
+      "type": "file",
+      "size": 3709
+    },
+    {
+      "path": "library/src/main/ets/core/query/Join.ts",
+      "type": "file",
+      "size": 4035
+    },
+    {
+      "path": "library/src/main/ets/core/query/PropertyCondition.ts",
+      "type": "file",
+      "size": 3835
+    },
+    {
+      "path": "library/src/main/ets/core/query/Query.ts",
+      "type": "file",
+      "size": 7003
+    },
+    {
+      "path": "library/src/main/ets/core/query/QueryBuilder.ts",
+      "type": "file",
+      "size": 25763
+    },
+    {
+      "path": "library/src/main/ets/core/query/StringCondition.ts",
+      "type": "file",
+      "size": 1113
+    },
+    {
+      "path": "library/src/main/ets/core/query/WhereCollector.ts",
+      "type": "file",
+      "size": 8373
+    },
+    {
+      "path": "library/src/main/ets/core/query/WhereCondition.ts",
+      "type": "file",
+      "size": 955
+    },
+    {
+      "path": "library/src/main/ets/core/trace/DaoTraceUtil.ts",
+      "type": "file",
+      "size": 3744
+    },
+    {
+      "path": "library/src/main/ets/core/trace/traceConfig.ts",
+      "type": "file",
+      "size": 1115
+    },
+    {
+      "path": "library/src/main/resources/base/element/string.json",
+      "type": "file",
+      "size": 100
+    },
+    {
+      "path": "library/src/main/resources/en_US/element/string.json",
+      "type": "file",
+      "size": 100
+    },
+    {
+      "path": "library/src/main/resources/zh_CN/element/string.json",
+      "type": "file",
+      "size": 100
+    },
+    {
+      "path": "entry/src/main/ets/pages/entry/Observed/ChildObs.ts",
+      "type": "file",
+      "size": 902
+    },
+    {
+      "path": "entry/src/main/ets/pages/entry/Observed/ChildObsSec.ts",
+      "type": "file",
+      "size": 905
+    },
+    {
+      "path": "entry/src/main/ets/pages/entry/Observed/City.ts",
+      "type": "file",
+      "size": 1339
+    },
+    {
+      "path": "entry/src/main/ets/pages/entry/Observed/ParentObs.ts",
+      "type": "file",
+      "size": 1222
+    },
+    {
+      "path": "entry/src/main/ets/pages/entry/Observed/ParentObsSec.ts",
+      "type": "file",
+      "size": 1244
+    },
+    {
+      "path": "entry/src/main/ets/pages/entry/Observed/Province.ts",
+      "type": "file",
+      "size": 1264
+    },
+    {
+      "path": "entry/src/main/ets/pages/entry/Observed/SingleObserved.ts",
+      "type": "file",
+      "size": 1274
+    },
+    {
+      "path": "entry/src/main/ets/pages/entry/Observed/ToOneBook.ts",
+      "type": "file",
+      "size": 1415
+    },
+    {
+      "path": "entry/src/main/ets/pages/entry/Observed/ToOneChapter.ts",
+      "type": "file",
+      "size": 1281
+    },
+    {
+      "path": "entry/src/main/ets/pages/entry/joinProperty/Customer.ts",
+      "type": "file",
+      "size": 1171
+    },
+    {
+      "path": "entry/src/main/ets/pages/entry/joinProperty/JoinPropertyUser.ts",
+      "type": "file",
+      "size": 1447
+    },
+    {
+      "path": "library/src/main/ets/core/dbflow/base/ResultData.ts",
+      "type": "file",
+      "size": 2384
+    },
+    {
+      "path": "library/src/main/ets/core/dbflow/base/ResultSetCallBack.ts",
+      "type": "file",
+      "size": 751
+    },
+    {
+      "path": "library/src/main/ets/core/dbflow/base/Select.ts",
+      "type": "file",
+      "size": 5677
+    },
+    {
+      "path": "library/src/main/ets/core/dbflow/listener/OnTableChangedListener.ts",
+      "type": "file",
+      "size": 772
+    },
+    {
+      "path": "library/src/main/ets/core/dbflow/listener/TableAction.ts",
+      "type": "file",
+      "size": 978
+    }
+  ],
+  "languages": {
+    "TypeScript": {
+      "bytes": 400895,
+      "percentage": 99.29
+    },
+    "Batchfile": {
+      "bytes": 1449,
+      "percentage": 0.36
+    },
+    "Shell": {
+      "bytes": 1419,
+      "percentage": 0.35
+    }
+  },
+  "signatures": [],
+  "test_examples": [],
+  "issues": [],
+  "changelog": "## 2.3.2\n- Released version 2.3.2\n\n## 2.3.2-rc.1\n- Fixed the issue where passing an array to inData caused an error\n\n## 2.3.2-rc.0\n- Fixed the issue where only one Index annotation would take effect when multiple Index annotations were present\n\n## 2.3.1\n- Add some synchronization interfaces\n- Fix the problem that the api version needs to be greater than 14\n\n## 2.3.1-rc.3\n- Fix the problem of joint table query (due to system support reasons, SQL alias is used first)\n\n> Need Api Version 14 or higher\n\n## 2.3.1-rc.2\n- Fixed the problem that the indata is invalid when an empty array is passed in\n\n> Need Api Version 14 or higher\n\n## 2.3.1-rc.1\n- The judgment condition for batch deletion of empty sets is optimized\n\n> Need Api Version 14 or higher\n\n## 2.3.1-rc.0\n- Bug fix:\n  - Remove invalid methods in deleteByKeySync\n  - Fixed the problem that an entire table is deleted due to the import of an empty set in the batch deletion interface\n\n> Need Api Version 14 or higher\n\n## 2.3.0\n- Released version 2.3.0\n\n> Need Api Version 14 or higher\n\n## 2.3.0-rc.1\n- Add some synchronization interfaces\n  - queryBuilder.listSync\n  - insertOrReplaceSync\n  - deleteSync\\deleteBykeySync\n  - updateSync\n  - saveInTxASync\n  - loadSync\\loadAllSync\n\n> Need Api Version 14 or higher\n\n## 2.3.0-rc.0\n- Fixed the issue printing log\n- Automatic database upgrade\n- Database performance optimization\n- Database operation and maintenance capability enhancement\n\n> Need Api Version 14 or higher\n\n## 2.2.6\n- Released version 2.2.6\n\n## 2.2.6-rc.2\n- Fixed the issue where obtaining columnIndex was abnormal after modifying the data table structure, resulting in incorrect query results\n\n## 2.2.6-rc.1\n- Modify serious or fatal issues detected by CodeCheck scanning.\n\n## 2.2.6-rc.0\n- Support for entities annotated with annotations from DataORM and also annotated with @Observed.\n\n## 2.2.5\n- 修复checkAddOffset内部实现错误\n\n## 2.2.4\n- 发布2.2.4正式版，在DevEco Studio: NEXT Beta1-5.0.3.806, SDK: API12 Release(5.0.0.66)上验证通过\n\n## 2.2.3\n- 修复AbstractDao.insertOrReplace(entity: T)插入或更新会自动修改entity的主键值\n- 修复queryRaw(where: string, ...selectionArg: string[])函数内部实现错误\n\n## 2.2.3-rc.0\n- 支持设置联合主键Union功能\n\n## 2.2.2\n- 发布2.2.2正式版\n\n## 2.2.2-rc.3\n- 修复DatabaseOpenHelper.getReadableDb/getWritableDb获取到的Database name是undefined的问题\n\n## 2.2.2-rc.2\n- 删除不必要的引用\n\n## 2.2.2-rc.1\n- 支持自定义数据库路径\n- 全局变量支持多数据库场景\n- 支持数据库降级，允许设置的版本比原版本低\n\n## 2.2.2-rc.0\n- 修复重启应用后多表关系失效的问题\n- 修复updateInTxAsync传入数组更新失败的问题\n- 修复inData、notIn传入数组失效的问题\n\n## 2.2.1\n- 修复将条件语句作为条件时查询失败的问题\n\n## 2.2.1-rc.2\n- 修复in、notIn、between条件查询失败的问题\n\n## 2.2.1-rc.1\n- 修复insertOrReplaceInTxArrAsync批量插入更新失败，InsertPage添加批量插入和批量更新示例\n\n## 2.2.1-rc.0\n- 修复setVersionAsync设置版本号触发升级，保存的版本号升级报错，添加相关测试用例\n\n## 2.2.0\n- 新增支持以下功能：\n  - 支持Convert注解的能力\n  - 支持Transient注解的能力\n  - 支持Embedded注解的能力\n  - 支持Entity注解中，增加禁止创建表的高级标志createInDb\n- 优化以下功能：\n  - 去除在创建数据库时，全局变量的配置\n  - 更改onCreate_D及其onUpgrade_D方法名分别为：onCreateDatabase及其onUpgradeDatabase\n  - 去除在创建数据库时，主动调用onCreate_D\n  - 优化数据库版本升级功能\n  - 在用CursorQuery查询的时候，在CursorQuery中新增list接口封装，少了dao.convertCursor2Entity(query)动作，可以直接调用list接口\n\n## 2.1.1\n- 修复部分接口时序错误问题\n\n## 2.1.0\n- 适配ArkTS语法\n- globalThis全局设置更改单例模式GlobalContext设置\n\n## 2.0.3\n- 修复了 query aaa 按钮失效的问题\n- 修复了 Query aaa bbb ccc 按钮失效的问题\n\n## 2.0.2\n- 添加复合主键功能\n- 修改代码中的单词错误，并规范命名\n\n## 2.0.1\n\n- 修复使用insertOrReplace()接口的逻辑问题\n- 修复数据库的@Columns装饰器的columnName必须要和被其修饰的属性名保持一样的问题\n- 修复demo添加数据之后save和修改的逻辑问题\n\n## 2.0.0\n\n- 适配DevEco Studio 版本：3.1 Beta2（3.1.0.400），OpenHarmony SDK:API9（3.2.11.9）\n\n## 1.1.4\n\n- 增加支持以下功能：\n\n1.支持多个表之间查询的功能，也就是join查询（JoinEntry）\n2.支持一对多ToMany查询\n3.支持关系映射用来表示一个实体与另一个实体的一对一关系的查询（ToOne）\n4.关联查询的升、降序排列（OrderBy）\n5.索引表的创建\n\n## 1.1.3\n\n- 升级到apiV9\n- 修改数据库加密库加密方式（以前版本通过加密键值进行加密，现通过bool开关进行控制，值为true值时为加密库）\n- 添加注解使用方式说明\n- 修改列名和实体名称不一致数据操作异常问题\n\n\n## 1.1.2\n\n- 修复方法名和原生属性名冲突的问题\n- 修复数据库备份的问题（通过库名称备份库，若存在则执行失败。示例里给的固定库名，只能生效一次）\n\n## 1.1.1\n\n- 修复npm引用包编译报错的问题\n\n## 1.1.0\n\n- 变更数据库备份实现方式\n\n## 1.0.3\n\n1. 修复在3.2beta版本Add数据无响应的问题\n2. 添加支持数据回滚功能\n3. 插入逻辑异常抛出处理\n4. 标签处理\n5. 优化sqlite支持的枚举类型\n\n## 1.0.2\n\n- api8升级到api9\n\n## 1.0.1\n\n- 新增以下功能：\n\n1. 数据库加密功能\n\n2. 数据库数据导入\n\n3. sql原始语句查询\n\n## 1.0.0\n\n- 支持以下功能：\n\n1. 数据库数据插入功能\n2. 数据库查询功能\n3. 数据库编辑功能\n4. 数据库删除功能\n5. 数据库缓存功能\n6. 数据库实体和表列关系映射功能\n7. 数据库表创建、删除等sql语句生成\n8. 数据库备份功能\n9. 数据库升级功能\n10. 数据库数据操作监听\n\n",
+  "releases": []
+}

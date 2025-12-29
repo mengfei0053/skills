@@ -1,0 +1,281 @@
+# Repository File Structure
+
+Total items: 275
+
+```
+📄 .eslintignore
+📁 .gitee
+📄 .gitignore
+📁 AppScope
+📄 CHANGELOG.md
+📄 COMMITTERS.md
+📄 LICENSE
+📄 NOTICE
+📄 OAT.xml
+📄 README.OpenSource
+📄 README.md
+📄 README_zh.md
+📄 TEST.md
+📄 build-profile.json5
+📁 entry
+📁 gif
+📁 hvigor
+📄 hvigorfile.ts
+📄 hvigorw
+📄 hvigorw.bat
+📁 library
+📄 oh-package.json5
+  📄 ISSUE_TEMPLATE.zh-CN.md
+  📁 ISSUE_TEMPLATE
+  📄 PULL_REQUEST_TEMPLATE.zh-CN.md
+  📄 app.json5
+  📁 resources
+  📄 .gitignore
+  📄 build-profile.json5
+  📄 hvigorfile.ts
+  📄 obfuscation-rules.txt
+  📄 oh-package.json5
+  📁 src
+  📄 sample.gif
+  📄 hvigor-config.json5
+  📄 hvigor-wrapper.js
+  📄 .gitignore
+  📄 build-profile.json5
+  📄 hvigorfile.ts
+  📄 index.ts
+  📄 oh-package.json5
+  📁 src
+    📄 bug-report.yml
+    📄 config.yml
+    📄 feature-request.yml
+    📄 question.yml
+    📄 security-issue.yml
+    📁 base
+    📁 main
+    📁 ohosTest
+    📁 main
+      📁 element
+      📁 media
+      📁 ets
+      📄 module.json5
+      📁 resources
+      📁 ets
+      📄 module.json5
+      📁 resources
+      📁 ets
+      📄 module.json5
+      📁 resources
+        📄 string.json
+        📄 app_icon.png
+        📁 entryability
+        📁 pages
+        📁 utils
+        📁 base
+        📁 en_US
+        📁 rawfile
+        📁 zh_CN
+        📁 test
+        📁 testability
+        📁 testrunner
+        📁 base
+        📁 core
+        📁 base
+        📁 en_US
+        📁 zh_CN
+          📄 EntryAbility.ets
+          📄 Classes.ts
+          📄 CompositePrimaryKey.ets
+          📄 ConvertPage.ets
+          📄 DateEntity.ts
+          📄 EmbedPage.ets
+          📄 ExampleOpenHelper.ts
+          📄 ExampleOpenHelper2.ts
+          📄 ExtendsPage.ets
+          📄 Index.ets
+          📄 InsertPage.ets
+          📄 JoinManyToDateEntity.ts
+          📄 MuktiDataViewlibrary.ets
+          📄 Note.ts
+          📄 NoteType.ts
+          📄 ObservedAndDataPage.ets
+          📄 ObservedAndDataSecPage.ets
+          📄 ObservedSinglePage.ets
+          📄 ObservedToManyPage.ets
+          📄 ObservedToOnePage.ets
+          📄 SavePage.ets
+          📄 Student.ts
+          📄 SyncApi.ets
+          📄 Teacher.ts
+          📄 UnionPrimaryKey.ets
+          📄 annotation.ets
+          📁 convert
+          📄 customDir.ets
+          📁 embed
+          📁 entry
+          📄 home.ets
+          📁 test
+          📄 toolbar.ets
+          📄 upgrade.ets
+          📄 util.ts
+          📄 LogUtil.ts
+          📄 TaskTime.ts
+          📁 element
+          📁 media
+          📁 profile
+          📁 element
+          📄 add_student_teacher.sql
+          📄 minimal-entity.sql
+          📄 minimal-entity.sql1
+          📁 element
+          📄 Ability.test.ets
+          📄 Annotation.test.ets
+          📄 CTXInstance.ts
+          📄 ExampleOpenHelper.ts
+          📄 List.test.ets
+          📄 Note.test.ets
+          📄 SyncApiTest.test.ets
+          📄 TestAbility.ets
+          📁 pages
+          📄 OpenHarmonyTestRunner.ts
+          📁 element
+          📁 media
+          📁 profile
+          📄 AbstractDao.ts
+          📄 AbstractDaoMaster.ts
+          📄 AbstractDaoSession.ts
+          📄 BaseDao.ts
+          📄 ColumnType.ts
+          📄 DaoException.ts
+          📄 DaoLog.ts
+          📄 DaoMaster.ts
+          📄 DaoSession.ts
+          📄 DbUtils.ts
+          📄 GlobalContext.ts
+          📄 InternalQueryDaoAccess.ts
+          📄 InternalUnitTestDaoAccess.ts
+          📄 Property.ts
+          📄 StorageUtils.ts
+          📄 StringBuilder.ts
+          📄 Unit8ArrayUtils.ts
+          📁 annotation
+          📁 common
+          📁 converter
+          📁 database
+          📁 dbflow
+          📁 entity
+          📁 identityscope
+          📁 internal
+          📁 query
+          📁 trace
+          📁 element
+          📁 element
+          📁 element
+            📄 ConvertInfo.ts
+            📄 TypeConvert.ts
+            📄 ChildInfo.ts
+            📄 ChildTwo.ts
+            📄 CreateInDBInfo.ts
+            📄 Father.ts
+            📄 Mother.ts
+            📄 SunInfo.ts
+            📄 SunInfoTwo.ts
+            📄 User.ts
+            📄 Book.ts
+            📄 Chapter.ts
+            📁 Observed
+            📄 One.ts
+            📄 OnePlus.ts
+            📄 People.ts
+            📄 Phone.ts
+            📄 Topics.ts
+            📁 joinProperty
+            📄 Student.ets
+            📄 TableBasic.ts
+            📄 color.json
+            📄 string.json
+            📄 back.png
+            📄 icon.png
+            📄 main_pages.json
+            📄 string.json
+            📄 string.json
+            📄 Index.ets
+            📄 color.json
+            📄 string.json
+            📄 icon.png
+            📄 test_pages.json
+            📄 Column.ts
+            📄 Convert.ts
+            📄 Embedded.ts
+            📄 Entity.ts
+            📄 Id.ts
+            📄 Index.ts
+            📄 JoinEntity.ts
+            📄 NotNull.ts
+            📄 ToMany.ts
+            📄 ToOne.ts
+            📄 Transient.ts
+            📄 Union.ts
+            📄 Unique.ts
+            📄 Util.ts
+            📄 JList.ts
+            📄 JMap.ts
+            📄 Queue.ts
+            📄 ConvertParameter.ts
+            📄 PropertyConverter.ts
+            📄 Database.ts
+            📄 DatabaseOpenHelper.ts
+            📄 DatabaseStatement.ts
+            📄 SQLiteOpenHelper.ts
+            📄 SQLiteStatement.ts
+            📄 StandardDatabase.ts
+            📄 StandardDatabaseStatement.ts
+            📄 Migration.ts
+            📁 base
+            📁 listener
+            📄 Entity.ts
+            📄 ToManyEntity.ts
+            📄 ToManyWithJoinEntity.ts
+            📄 ToOneEntity.ts
+            📄 IdentityScope.ts
+            📄 IdentityScopeLong.ts
+            📄 IdentityScopeObject.ts
+            📄 IdentityScopeType.ts
+            📄 DaoConfig.ts
+            📄 SqlUtils.ts
+            📄 TableStatements.ts
+            📄 AbstractCondition.ts
+            📄 AbstractQuery.ts
+            📄 AbstractQueryData.ts
+            📄 AbstractQueryWithLimit.ts
+            📄 CountQuery.ts
+            📄 CursorQuery.ts
+            📄 DeleteQuery.ts
+            📄 Join.ts
+            📄 PropertyCondition.ts
+            📄 Query.ts
+            📄 QueryBuilder.ts
+            📄 StringCondition.ts
+            📄 WhereCollector.ts
+            📄 WhereCondition.ts
+            📄 DaoTraceUtil.ts
+            📄 traceConfig.ts
+            📄 string.json
+            📄 string.json
+            📄 string.json
+              📄 ChildObs.ts
+              📄 ChildObsSec.ts
+              📄 City.ts
+              📄 ParentObs.ts
+              📄 ParentObsSec.ts
+              📄 Province.ts
+              📄 SingleObserved.ts
+              📄 ToOneBook.ts
+              📄 ToOneChapter.ts
+              📄 Customer.ts
+              📄 JoinPropertyUser.ts
+              📄 ResultData.ts
+              📄 ResultSetCallBack.ts
+              📄 Select.ts
+              📄 OnTableChangedListener.ts
+              📄 TableAction.ts
+```
