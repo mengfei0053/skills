@@ -1,30 +1,31 @@
 ---
 name: openharmony-ui-reference
-description: Use when developing OpenHarmony UI with ArkTS - looking up layouts, components, state management, animations, navigation, or handling errors like missing decorators, state not updating, or rendering issues
+description: 用于使用 ArkTS 开发 OpenHarmony UI 时 - 查找布局、组件、状态管理、动画、导航,或处理缺少装饰器、状态不更新、渲染问题等错误
 ---
 
-# OpenHarmony UI Quick Reference
+# OpenHarmony UI 快速参考
 
-## Overview
+## 概述
 
-OpenHarmony uses **ArkTS** (TypeScript-based declarative UI) for building user interfaces. Core concepts: declarative UI description, component-based architecture, state management decorators, and responsive layouts.
+OpenHarmony 使用 **ArkTS** (基于 TypeScript 的声明式 UI) 来构建用户界面。核心概念:声明式 UI 描述、组件化架构、状态管理装饰器、响应式布局。
 
-**Official docs:** `docs-OpenHarmony-v6.0-Release/zh-cn/application-dev/ui/`
+**官方文档:** `docs-OpenHarmony-v6.0-Release/zh-cn/application-dev/ui/`
+**快速参考:** `docs/` (本地提取的核心文档)
 
-## State Management
+## 状态管理
 
-### V2 (Recommended for New Projects)
+### V2 (推荐用于新项目)
 
-| Decorator | Purpose | Scope |
+| 装饰器 | 用途 | 作用域 |
 |-----------|---------|-------|
-| `@Local` | Component internal state | Component only |
-| `@Param` | Parent → Child (one-way) | Parent to child |
-| `@Event` | Child → Parent callbacks | Child to parent |
-| `@Provider`/`@Consumer` | Cross-component sync | Any descendant |
+| `@Local` | 组件内部状态 | 仅组件内部 |
+| `@Param` | 父 → 子 (单向) | 父到子 |
+| `@Event` | 子 → 父回调 | 子到父 |
+| `@Provider`/`@Consumer` | 跨组件同步 | 任意后代组件 |
 
-**Two-way binding:**
+**双向绑定:**
 ```typescript
-// Parent
+// 父组件
 @ComponentV2
 struct Parent {
   @Local text: string = ''
@@ -34,7 +35,7 @@ struct Parent {
   }
 }
 
-// Child
+// 子组件
 @ComponentV2
 struct Child {
   @Param text: string
@@ -46,36 +47,36 @@ struct Child {
   }
 }
 
-// Syntax sugar (simpler)
+// 语法糖(更简单)
 TextInput({ text: $$this.text })
 ```
 
-### V1 (Legacy)
+### V1 (传统方式)
 
-| Decorator | Purpose | Scope |
+| 装饰器 | 用途 | 作用域 |
 |-----------|---------|-------|
-| `@State` | Component internal state | Component only |
-| `@Prop` | Parent → Child (one-way) | Parent to child |
-| `@Link` | Parent ↔ Child (two-way) | Bidirectional |
-| `@Provide`/`@Consume` | Cross-component sync | Any descendant |
+| `@State` | 组件内部状态 | 仅组件内部 |
+| `@Prop` | 父 → 子 (单向) | 父到子 |
+| `@Link` | 父 ↔ 子 (双向) | 双向绑定 |
+| `@Provide`/`@Consume` | 跨组件同步 | 任意后代组件 |
 
-**Documentation:** `state-management/arkts-state-management-overview.md`
+**文档参考:** `docs/state-management/arkts-state-management-overview.md`
 
-## Layouts
+## 布局
 
-| What You Need | Component | Key Properties | Docs |
+| 需求 | 组件 | 关键属性 | 文档 |
 |---------------|-----------|----------------|------|
-| **Horizontal** | `Row` | space, alignItems, justifyContent | `arkts-layout-development-linear.md` |
-| **Vertical** | `Column` | space, alignItems, justifyContent | `arkts-layout-development-linear.md` |
-| **Stacking** | `Stack` | alignContent | `arkts-layout-development-stack-layout.md` |
-| **Flexible** | `Flex` | direction, wrap, justifyContent | `arkts-layout-development-flex-layout.md` |
-| **Relative** | `RelativeContainer` | x/y rules | `arkts-layout-development-relative-layout.md` |
-| **Grid** | `Grid`/`GridItem` | columnsTemplate, rowsTemplate | `arkts-layout-development-grid-layout.md` |
-| **Tabs** | `Tabs`/`TabContent` | barPosition, scrollable | `arkts-navigation-tabs.md` |
-| **List** | `List`/`ListItem` | space, scrollBar | `arkts-layout-development-create-list.md` |
-| **WaterFlow** | `WaterFlow`/`FlowItem` | columnsTemplate | `arkts-layout-development-create-waterflow.md` |
+| **水平排列** | `Row` | space, alignItems, justifyContent | `docs/layout/arkts-layout-development-linear.md` |
+| **垂直排列** | `Column` | space, alignItems, justifyContent | `docs/layout/arkts-layout-development-linear.md` |
+| **层叠布局** | `Stack` | alignContent | `docs/layout/arkts-layout-development-stack-layout.md` |
+| **弹性布局** | `Flex` | direction, wrap, justifyContent | `docs/layout/arkts-layout-development-flex-layout.md` |
+| **相对布局** | `RelativeContainer` | x/y 规则 | `docs/layout/arkts-layout-development-relative-layout.md` |
+| **网格布局** | `Grid`/`GridItem` | columnsTemplate, rowsTemplate | `docs/layout/arkts-layout-development-grid-layout.md` |
+| **标签页** | `Tabs`/`TabContent` | barPosition, scrollable | `docs/navigation/arkts-navigation-tabs.md` |
+| **列表** | `List`/`ListItem` | space, scrollBar | `docs/layout/arkts-layout-development-create-list.md` |
+| **瀑布流** | `WaterFlow`/`FlowItem` | columnsTemplate | `docs/layout/arkts-layout-development-create-waterflow.md` |
 
-**Center content:**
+**内容居中:**
 ```typescript
 Column() {
   Text('Centered')
@@ -86,25 +87,25 @@ Column() {
 .alignItems(HorizontalAlign.Center)
 ```
 
-**Documentation:** `arkts-layout-development-overview.md`
+**文档参考:** `docs/layout/arkts-layout-development-overview.md`
 
-## Common Components
+## 常用组件
 
-| Component | Usage | Docs |
+| 组件 | 用途 | 文档 |
 |-----------|-------|------|
-| **Text** | Display text | `arkts-common-components-text-display.md` |
-| **TextInput** | Single line input | `arkts-common-components-text-input.md` |
-| **TextArea** | Multi line input | `arkts-common-components-text-input.md` |
-| **Button** | Clickable action | `arkts-common-components-button.md` |
-| **Image** | Display image | `arkts-graphics-display.md` |
-| **List** | Vertical scrolling | `arkts-layout-development-create-list.md` |
-| **Grid** | Grid layout | `arkts-layout-development-create-grid.md` |
-| **Swiper** | Carousel/Slider | `arkts-layout-development-create-looping.md` |
-| **RichEditor** | Rich text editing | `arkts-common-components-richeditor.md` |
+| **Text** | 显示文本 | `docs/components/arkts-common-components-text-display.md` |
+| **TextInput** | 单行输入 | `docs/components/arkts-common-components-text-input.md` |
+| **TextArea** | 多行输入 | `docs/components/arkts-common-components-text-input.md` |
+| **Button** | 可点击按钮 | `docs/components/arkts-common-components-button.md` |
+| **Image** | 显示图片 | `docs/components/arkts-graphics-display.md` |
+| **List** | 垂直滚动列表 | `docs/layout/arkts-layout-development-create-list.md` |
+| **Grid** | 网格布局 | `docs/layout/arkts-layout-development-create-grid.md` |
+| **Swiper** | 轮播图 | `docs/layout/arkts-layout-development-create-looping.md` |
+| **RichEditor** | 富文本编辑器 | `docs/components/arkts-common-components-richeditor.md` |
 
-## Navigation
+## 导航
 
-**Navigation (Recommended):**
+**Navigation (推荐):**
 ```typescript
 @Entry
 @Component
@@ -125,41 +126,41 @@ struct NavPage {
 }
 ```
 
-**Router (Legacy):**
+**Router (传统方式):**
 ```typescript
 import router from '@ohos.router'
 
-// Push
+// 跳转页面
 router.pushUrl({ url: 'pages/Page2' })
 
-// Back
+// 返回
 router.back()
 ```
 
-**Documentation:**
-- Navigation: `arkts-navigation-navigation.md`
-- Router: `arkts-routing.md`
+**文档参考:**
+- Navigation: `docs/navigation/arkts-navigation-navigation.md`
+- Router: `docs/navigation/arkts-routing.md`
 
-## Dialogs & Popups
+## 对话框和弹窗
 
-| Type | Method | Use Case | Docs |
+| 类型 | 方法 | 使用场景 | 文档 |
 |------|--------|----------|------|
-| **Custom dialog** | `openCustomDialog()` | Recommended | `arkts-uicontext-custom-dialog.md` |
-| **Alert** | `AlertDialog.show()` | Simple confirmations | `arkts-base-dialog-overview.md` |
-| **ActionSheet** | `ActionSheet.show()` | Choice selection | `arkts-base-dialog-overview.md` |
-| **Popup** | `.bindPopup()` | Attached to component | `arkts-popup-and-menu-components-popup.md` |
-| **Toast** | `prompt.showToast()` | Brief feedback | `arkts-create-toast.md` |
+| **自定义对话框** | `openCustomDialog()` | 推荐 | `docs/uicontext/arkts-uicontext-custom-dialog.md` |
+| **警告对话框** | `AlertDialog.show()` | 简单确认 | `docs/dialogs/arkts-base-dialog-overview.md` |
+| **列表选择** | `ActionSheet.show()` | 选项选择 | `docs/dialogs/arkts-base-dialog-overview.md` |
+| **弹窗** | `.bindPopup()` | 绑定到组件 | `docs/popup/arkts-popup-and-menu-components-popup.md` |
+| **提示** | `prompt.showToast()` | 简短反馈 | `docs/popup/arkts-create-toast.md` |
 
-## Animation
+## 动画
 
-| Type | API | Use Case | Docs |
+| 类型 | API | 使用场景 | 文档 |
 |------|-----|----------|------|
-| **Attribute** | `.animateTo()` | Smooth property changes | `arkts-attribute-animation-overview.md` |
-| **Transition** | `.transition()` | Enter/exit animations | `arkts-transition-overview.md` |
-| **Component** | `animateTo` | Group multiple animations | `arkts-component-animation.md` |
+| **属性动画** | `.animateTo()` | 平滑属性变化 | `docs/animation/arkts-attribute-animation-overview.md` |
+| **转场动画** | `.transition()` | 进出场动画 | `docs/animation/arkts-transition-overview.md` |
+| **组件动画** | `animateTo` | 组合多个动画 | `docs/animation/arkts-component-animation.md` |
 
 ```typescript
-// Property animation
+// 属性动画
 @State scale: number = 1
 
 Image($r('app.media.icon'))
@@ -171,24 +172,24 @@ Image($r('app.media.icon'))
   })
 ```
 
-## Rendering Control
+## 渲染控制
 
-| Control | Syntax | Use Case | Docs |
+| 控制方式 | 语法 | 使用场景 | 文档 |
 |---------|--------|----------|------|
-| **Conditional** | `if (condition) { } else { }` | Show/hide components | `state-management/arkts-rendering-control-ifelse.md` |
-| **Loop** | `ForEach(arr, (item) => {}, (item) => key)` | Render lists | `state-management/arkts-rendering-control-foreach.md` |
-| **Lazy loop** | `LazyForEach(dataSource, (item) => {})` | Large data sets | `state-management/arkts-rendering-control-lazyforeach.md` |
+| **条件渲染** | `if (condition) { } else { }` | 显示/隐藏组件 | `docs/state-management/arkts-rendering-control-ifelse.md` |
+| **循环渲染** | `ForEach(arr, (item) => {}, (item) => key)` | 渲染列表 | `docs/state-management/arkts-rendering-control-foreach.md` |
+| **懒加载循环** | `LazyForEach(dataSource, (item) => {})` | 大数据集 | `docs/state-management/arkts-rendering-control-lazyforeach.md` |
 
 ```typescript
-// ForEach (always provide unique key)
+// ForEach (始终提供唯一键)
 ForEach(this.items, (item: Item) => {
   Text(item.name)
 }, (item: Item) => item.id)
 ```
 
-## Styling
+## 样式
 
-**@Styles (reusable):**
+**@Styles (可复用样式):**
 ```typescript
 @Styles
 function cardStyle() {
@@ -201,7 +202,7 @@ Column() {}
   .cardStyle()
 ```
 
-**@Extend (extend components):**
+**@Extend (扩展组件):**
 ```typescript
 @Extend(Text)
 function redText() {
@@ -213,11 +214,11 @@ Text('Hello')
   .redText()
 ```
 
-**Documentation:** `state-management/arkts-style.md`
+**文档参考:** `docs/state-management/arkts-style.md`
 
-## Common Patterns
+## 常用模式
 
-**Custom Component with lifecycle:**
+**带生命周期的自定义组件:**
 ```typescript
 @ComponentV2
 struct CustomComponent {
@@ -237,7 +238,7 @@ struct CustomComponent {
 }
 ```
 
-**@Builder (reusable UI fragment):**
+**@Builder (可复用 UI 片段):**
 ```typescript
 @Builder
 function TitleBar(title: string) {
@@ -250,47 +251,49 @@ function TitleBar(title: string) {
   .padding(16)
 }
 
-// Use
+// 使用
 Column() {
   TitleBar({ title: 'My Page' })
 }
 ```
 
-**Documentation:** `state-management/arkts-builder.md`
+**文档参考:** `docs/state-management/arkts-builder.md`
 
-## Troubleshooting
+## 问题排查
 
-| Symptom | Common Cause | Fix |
+| 症状 | 常见原因 | 解决方法 |
 |---------|--------------|-----|
-| State changes not updating UI | Missing decorator | Add `@Local` (V2) or `@State` (V1) |
-| Child not receiving updates | One-way sync instead of two-way | Add `@Event` callback (V2) or use `@Link` (V1) |
-| Nested object not reactive | Missing deep observation | Add `@ObservedV2`/`@Trace` (V2) or `@Observed`/`@ObjectLink` (V1) |
-| Unnecessary re-renders | Large objects in local state | Use `@Param` for immutable props |
-| ForEach rendering issues | Missing unique key | Always provide unique key generator |
-| Navigation not working | Using router instead of Navigation | Use `NavPathStack` API |
-| Dialog not showing | Missing UI context | Use `getUIContext().openCustomDialog()` |
+| 状态变化不更新 UI | 缺少装饰器 | 添加 `@Local` (V2) 或 `@State` (V1) |
+| 子组件未接收更新 | 使用单向而非双向绑定 | 添加 `@Event` 回调 (V2) 或使用 `@Link` (V1) |
+| 嵌套对象不响应 | 缺少深度观察 | 添加 `@ObservedV2`/`@Trace` (V2) 或 `@Observed`/`@ObjectLink` (V1) |
+| 不必要的重渲染 | 本地状态中有大对象 | 对不可变属性使用 `@Param` |
+| ForEach 渲染问题 | 缺少唯一键 | 始终提供唯一键生成器 |
+| 导航不工作 | 使用 Router 而非 Navigation | 使用 `NavPathStack` API |
+| 对话框不显示 | 缺少 UI 上下文 | 使用 `getUIContext().openCustomDialog()` |
 
-**Documentation:**
-- V2 State: `state-management/arkts-mvvm-V2.md`
-- V1 State: `state-management/arkts-mvvm.md`
+**文档参考:**
+- V2 状态管理: `docs/state-management/arkts-mvvm-V2.md`
+- V1 状态管理: `docs/state-management/arkts-mvvm.md`
 
-## Important Notes
+## 重要提示
 
-- **Always provide unique keys** to `ForEach` to avoid rendering issues
-- **Use V2 state management** (`@Local`, `@Param`) for new projects
-- **Prefer Navigation** over Router for page routing
-- **Use `$$` syntax** for simpler two-way binding when possible
-- **LazyForEach** for large datasets (> 1000 items)
-- **Test on different screen sizes** using media queries
+- **始终提供唯一键** 给 `ForEach` 以避免渲染问题
+- **新项目使用 V2 状态管理** (`@Local`, `@Param`)
+- **优先使用 Navigation** 而非 Router 进行页面路由
+- **尽可能使用 `$$` 语法** 简化双向绑定
+- **大数据集使用 LazyForEach** (> 1000 项)
+- **在不同屏幕尺寸上测试** 使用媒体查询
 
-## Further Reference
+## 更多参考
 
-**Official Documentation:** `docs-OpenHarmony-v6.0-Release/zh-cn/application-dev/ui/`
+**官方文档:** `docs-OpenHarmony-v6.0-Release/zh-cn/application-dev/ui/`
 
-**Key Documents:**
-- UI Overview: `arkts-ui-development-overview.md`
-- State Management: `state-management/arkts-state-management-overview.md`
-- Layout Development: `arkts-layout-development-overview.md`
-- Component Library: `arkts-common-components-text-display.md` and related files
-- Navigation: `arkts-navigation-navigation.md`
-- Animation: `arkts-attribute-animation-overview.md`
+**本地快速参考:** `docs/`
+
+**核心文档:**
+- UI 概览: `docs/overview/arkts-ui-development-overview.md`
+- 状态管理: `docs/state-management/arkts-state-management-overview.md`
+- 布局开发: `docs/layout/arkts-layout-development-overview.md`
+- 组件库: `docs/components/arkts-common-components-text-display.md` 及相关文件
+- 导航: `docs/navigation/arkts-navigation-navigation.md`
+- 动画: `docs/animation/arkts-attribute-animation-overview.md`
