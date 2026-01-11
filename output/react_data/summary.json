@@ -1,0 +1,13 @@
+{
+  "name": "react",
+  "total_pages": 1,
+  "base_url": "https://react.dev/",
+  "llms_txt_detected": false,
+  "llms_txt_variant": null,
+  "pages": [
+    {
+      "title": "React",
+      "url": "https://react.dev/"
+    }
+  ]
+}

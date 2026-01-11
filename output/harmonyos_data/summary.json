@@ -1,0 +1,13 @@
+{
+  "name": "harmonyos",
+  "total_pages": 1,
+  "base_url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/application-dev-guide",
+  "llms_txt_detected": false,
+  "llms_txt_variant": null,
+  "pages": [
+    {
+      "title": "文档中心",
+      "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/application-dev-guide"
+    }
+  ]
+}
