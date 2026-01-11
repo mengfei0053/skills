@@ -1,85 +1,85 @@
 ---
 name: openharmony-ability-kit
-description: Use when developing OpenHarmony applications with Ability Kit - UIAbility lifecycle, component communication with Want, Context APIs, ExtensionAbility, BundleManager, or handling errors like 16000001 (ability not found), 16000011 (context not exist)
+description: 用于使用 Ability Kit 开发 OpenHarmony 应用时 - UIAbility 生命周期、使用 Want 进行组件通信、Context API、ExtensionAbility、BundleManager,或处理错误如 16000001(ability 未找到)、16000011(context 不存在)等
 ---
 
-# OpenHarmony Ability Kit Quick Reference
+# OpenHarmony Ability Kit 快速参考
 
-## Overview
+## 概述
 
-Ability Kit is the core framework for managing application components in OpenHarmony Stage Model. It provides:
+Ability Kit 是 OpenHarmony Stage 模型中管理应用组件的核心框架。它提供:
 
-- **UIAbility**: UI-based application components with lifecycle management
-- **AbilityStage**: Module-level component manager for initialization
-- **Want**: Data carrier for inter-component communication
-- **Context**: Application/component context for resource access and operations
-- **ExtensionAbility**: Extended capabilities (Form, Service, etc.)
-- **BundleManager**: Package and application information queries
+- **UIAbility**: 带生命周期的 UI 应用组件
+- **AbilityStage**: 模块级组件管理器,用于初始化
+- **Want**: 组件间通信的数据载体
+- **Context**: 应用/组件上下文,用于资源访问和操作
+- **ExtensionAbility**: 扩展能力(Form、Service 等)
+- **BundleManager**: 包和应用信息查询
 
-**Official docs:** `docs-OpenHarmony-v6.0-Release/zh-cn/application-dev/reference/apis-ability-kit/`
+**官方文档:** `docs-OpenHarmony-v6.0-Release/zh-cn/application-dev/reference/apis-ability-kit/`
 
-## Decision Flow
+## 决策流程
 
 ```dot
 digraph ability_decision {
-  "Need to?" [shape=diamond];
-  "Create UI app" [shape=box];
-  "Background task" [shape=box];
-  "Cross-app communication" [shape=box];
-  "Query app info" [shape=box];
-  
-  "Use UIAbility" [shape=ellipse];
-  "Use ExtensionAbility" [shape=ellipse];
-  "Use Want + Context" [shape=ellipse];
-  "Use BundleManager" [shape=ellipse];
-  
-  "Need to?" -> "Create UI app" [label="UI"];
-  "Need to?" -> "Background task" [label="Background"];
-  "Need to?" -> "Cross-app communication" [label="Communication"];
-  "Need to?" -> "Query app info" [label="Info"];
-  
-  "Create UI app" -> "Use UIAbility";
-  "Background task" -> "Use ExtensionAbility";
-  "Cross-app communication" -> "Use Want + Context";
-  "Query app info" -> "Use BundleManager";
+  "需要?" [shape=diamond];
+  "创建 UI 应用" [shape=box];
+  "后台任务" [shape=box];
+  "跨应用通信" [shape=box];
+  "查询应用信息" [shape=box];
+
+  "使用 UIAbility" [shape=ellipse];
+  "使用 ExtensionAbility" [shape=ellipse];
+  "使用 Want + Context" [shape=ellipse];
+  "使用 BundleManager" [shape=ellipse];
+
+  "需要?" -> "创建 UI 应用" [label="UI"];
+  "需要?" -> "后台任务" [label="后台"];
+  "需要?" -> "跨应用通信" [label="通信"];
+  "需要?" -> "查询应用信息" [label="信息"];
+
+  "创建 UI 应用" -> "使用 UIAbility";
+  "后台任务" -> "使用 ExtensionAbility";
+  "跨应用通信" -> "使用 Want + Context";
+  "查询应用信息" -> "使用 BundleManager";
 }
 ```
 
-## Quick Reference Table
+## 快速参考表
 
-| Module | API Version | Purpose | Import |
+| 模块 | API 版本 | 用途 | 导入语句 |
 |--------|-------------|---------|--------|
-| UIAbility | 9+ | UI application component | `import { UIAbility } from '@kit.AbilityKit'` |
-| AbilityStage | 9+ | Module-level manager | `import { AbilityStage } from '@kit.AbilityKit'` |
-| Want | 9+ | Component communication | `import { Want } from '@kit.AbilityKit'` |
-| common (Context) | 9+ | Context APIs | `import { common } from '@kit.AbilityKit'` |
-| bundleManager | 9+ | Package queries | `import { bundleManager } from '@kit.AbilityKit'` |
-| wantAgent | 9+ | Want encapsulation | `import { wantAgent } from '@kit.AbilityKit'` |
-| appManager | 9+ | App lifecycle management | `import { appManager } from '@kit.AbilityKit'` |
-| AbilityConstant | 9+ | Ability constants | `import { AbilityConstant } from '@kit.AbilityKit'` |
-| Configuration | 9+ | System configuration | `import { Configuration } from '@kit.AbilityKit'` |
+| UIAbility | 9+ | UI 应用组件 | `import { UIAbility } from '@kit.AbilityKit'` |
+| AbilityStage | 9+ | 模块级管理器 | `import { AbilityStage } from '@kit.AbilityKit'` |
+| Want | 9+ | 组件通信 | `import { Want } from '@kit.AbilityKit'` |
+| common (Context) | 9+ | Context API | `import { common } from '@kit.AbilityKit'` |
+| bundleManager | 9+ | 包查询 | `import { bundleManager } from '@kit.AbilityKit'` |
+| wantAgent | 9+ | Want 封装 | `import { wantAgent } from '@kit.AbilityKit'` |
+| appManager | 9+ | 应用生命周期管理 | `import { appManager } from '@kit.AbilityKit'` |
+| AbilityConstant | 9+ | Ability 常量 | `import { AbilityConstant } from '@kit.AbilityKit'` |
+| Configuration | 9+ | 系统配置 | `import { Configuration } from '@kit.AbilityKit'` |
 
-## UIAbility Lifecycle
+## UIAbility 生命周期
 
-### Lifecycle States
+### 生命周期状态
 
 ```
 Create -> WindowStageCreate -> Foreground <-> Background -> WindowStageDestroy -> Destroy
 ```
 
-### Key Callbacks
+### 关键回调
 
-| Callback | When Called | Use Case |
+| 回调 | 调用时机 | 使用场景 |
 |----------|-------------|----------|
-| `onCreate(want, launchParam)` | Ability created | Initialize non-UI resources |
-| `onWindowStageCreate(windowStage)` | Window ready | Load UI content, set window properties |
-| `onForeground()` | Entering foreground | Resume operations, refresh data |
-| `onBackground()` | Entering background | Save state, release resources |
-| `onWindowStageDestroy()` | Window destroying | Clean up window resources |
-| `onDestroy()` | Ability destroying | Final cleanup |
-| `onNewWant(want, launchParam)` | Re-activated (singleton) | Handle new intent |
+| `onCreate(want, launchParam)` | Ability 创建时 | 初始化非 UI 资源 |
+| `onWindowStageCreate(windowStage)` | 窗口就绪时 | 加载 UI 内容,设置窗口属性 |
+| `onForeground()` | 进入前台时 | 恢复操作,刷新数据 |
+| `onBackground()` | 进入后台时 | 保存状态,释放资源 |
+| `onWindowStageDestroy()` | 窗口销毁时 | 清理窗口资源 |
+| `onDestroy()` | Ability 销毁时 | 最终清理 |
+| `onNewWant(want, launchParam)` | 重新激活(单例模式) | 处理新的意图 |
 
-### Basic UIAbility Template
+### 基础 UIAbility 模板
 
 ```typescript
 import { UIAbility, AbilityConstant, Want } from '@kit.AbilityKit';
@@ -89,13 +89,13 @@ import { hilog } from '@kit.PerformanceAnalysisKit';
 export default class EntryAbility extends UIAbility {
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
     hilog.info(0x0000, 'testTag', 'Ability onCreate');
-    // Initialize non-UI resources
+    // 初始化非 UI 资源
   }
 
   onWindowStageCreate(windowStage: window.WindowStage): void {
     hilog.info(0x0000, 'testTag', 'Ability onWindowStageCreate');
-    
-    // Load main page
+
+    // 加载主页面
     windowStage.loadContent('pages/Index', (err, data) => {
       if (err.code) {
         hilog.error(0x0000, 'testTag', 'Failed to load content: %{public}s', JSON.stringify(err));
@@ -119,15 +119,15 @@ export default class EntryAbility extends UIAbility {
 }
 ```
 
-### Launch Types
+### 启动类型
 
-| Type | Value | Description | Use Case |
+| 类型 | 值 | 说明 | 使用场景 |
 |------|-------|-------------|----------|
-| `SINGLETON` | 0 | Single instance | Main entry, settings |
-| `MULTITON` | 1 | Multiple instances | Document editor |
-| `SPECIFIED` | 2 | Developer-controlled | Custom instance management |
+| `SINGLETON` | 0 | 单实例 | 主入口、设置页 |
+| `MULTITON` | 1 | 多实例 | 文档编辑器 |
+| `SPECIFIED` | 2 | 开发者控制 | 自定义实例管理 |
 
-Configure in `module.json5`:
+在 `module.json5` 中配置:
 ```json
 {
   "abilities": [{
@@ -139,19 +139,19 @@ Configure in `module.json5`:
 
 ## AbilityStage
 
-Module-level component manager, created before any Ability in the module.
+模块级组件管理器,在模块中的任何 Ability 之前创建。
 
-### Key Callbacks
+### 关键回调
 
-| Callback | When Called | Use Case |
+| 回调 | 调用时机 | 使用场景 |
 |----------|-------------|----------|
-| `onCreate()` | Module first loaded | Resource preloading, thread creation |
-| `onDestroy()` | Last ability exits (API 12+) | Module cleanup |
-| `onAcceptWant(want)` | Specified launch mode | Return unique ability key |
-| `onConfigurationUpdate(config)` | System config changes | Handle language/theme changes |
-| `onMemoryLevel(level)` | Memory pressure | Release non-essential resources |
+| `onCreate()` | 模块首次加载时 | 资源预加载、线程创建 |
+| `onDestroy()` | 最后一个 ability 退出时 (API 12+) | 模块清理 |
+| `onAcceptWant(want)` | 指定启动模式 | 返回唯一 ability 键 |
+| `onConfigurationUpdate(config)` | 系统配置变化时 | 处理语言/主题变化 |
+| `onMemoryLevel(level)` | 内存压力时 | 释放非必要资源 |
 
-### Basic AbilityStage Template
+### 基础 AbilityStage 模板
 
 ```typescript
 import { AbilityStage, Want, Configuration, AbilityConstant } from '@kit.AbilityKit';
@@ -159,11 +159,11 @@ import { AbilityStage, Want, Configuration, AbilityConstant } from '@kit.Ability
 export default class MyAbilityStage extends AbilityStage {
   onCreate(): void {
     console.log('MyAbilityStage onCreate');
-    // Module initialization
+    // 模块初始化
   }
 
   onAcceptWant(want: Want): string {
-    // For specified launch mode, return unique key
+    // 对于指定启动模式,返回唯一键
     if (want.abilityName === 'DocumentAbility') {
       return want.parameters?.docId as string || 'default';
     }
@@ -176,32 +176,32 @@ export default class MyAbilityStage extends AbilityStage {
 
   onMemoryLevel(level: AbilityConstant.MemoryLevel): void {
     console.log(`Memory level: ${level}`);
-    // Release caches when memory is low
+    // 内存低时释放缓存
   }
 }
 ```
 
-## Want Object
+## Want 对象
 
-Data carrier for component communication.
+组件通信的数据载体。
 
-### Want Structure
+### Want 结构
 
-| Field | Type | Description |
+| 字段 | 类型 | 说明 |
 |-------|------|-------------|
-| `bundleName` | string | Target bundle name |
-| `abilityName` | string | Target ability name |
-| `moduleName` | string | Target module name (optional) |
-| `action` | string | Action to perform |
-| `entities` | string[] | Entity categories |
-| `uri` | string | Data URI |
-| `type` | string | MIME type |
-| `parameters` | Record<string, Object> | Custom parameters |
-| `flags` | number | Want flags |
+| `bundleName` | string | 目标包名 |
+| `abilityName` | string | 目标 ability 名称 |
+| `moduleName` | string | 目标模块名(可选) |
+| `action` | string | 要执行的操作 |
+| `entities` | string[] | 实体类别 |
+| `uri` | string | 数据 URI |
+| `type` | string | MIME 类型 |
+| `parameters` | Record<string, Object> | 自定义参数 |
+| `flags` | number | Want 标志 |
 
-### Common Want Patterns
+### 常用 Want 模式
 
-**Explicit Start (Same App)**
+**显式启动(同一应用)**
 ```typescript
 let want: Want = {
   bundleName: 'com.example.myapp',
@@ -214,14 +214,14 @@ let want: Want = {
 this.context.startAbility(want);
 ```
 
-**Explicit Start (Cross App) - API 11+ Restrictions**
+**显式启动(跨应用) - API 11+ 限制**
 ```typescript
-// API 11+ requires implicit start for third-party apps
-// Use openLink instead:
+// API 11+ 要求第三方应用使用隐式启动
+// 使用 openLink 代替:
 this.context.openLink('https://example.com/path');
 ```
 
-**Implicit Start**
+**隐式启动**
 ```typescript
 let want: Want = {
   action: 'ohos.want.action.viewData',
@@ -231,7 +231,7 @@ let want: Want = {
 this.context.startAbility(want);
 ```
 
-**Start with Result**
+**带结果启动**
 ```typescript
 let want: Want = {
   bundleName: 'com.example.myapp',
@@ -244,9 +244,9 @@ this.context.startAbilityForResult(want).then((result) => {
 });
 ```
 
-**Return Result**
+**返回结果**
 ```typescript
-// In target ability
+// 在目标 ability 中
 let resultWant: Want = {
   parameters: {
     selectedItem: 'item1'
@@ -258,28 +258,28 @@ this.context.terminateSelfWithResult({
 });
 ```
 
-### Want Flags
+### Want 标志
 
-| Flag | Value | Description |
+| 标志 | 值 | 说明 |
 |------|-------|-------------|
-| `FLAG_AUTH_READ_URI_PERMISSION` | 0x00000001 | Grant read URI permission |
-| `FLAG_AUTH_WRITE_URI_PERMISSION` | 0x00000002 | Grant write URI permission |
-| `FLAG_INSTALL_ON_DEMAND` | 0x00000800 | Install on demand |
+| `FLAG_AUTH_READ_URI_PERMISSION` | 0x00000001 | 授予读取 URI 权限 |
+| `FLAG_AUTH_WRITE_URI_PERMISSION` | 0x00000002 | 授予写入 URI 权限 |
+| `FLAG_INSTALL_ON_DEMAND` | 0x00000800 | 按需安装 |
 
-## Context Hierarchy
+## Context 层级
 
-### Context Types
+### Context 类型
 
-| Context | Scope | Key APIs |
+| Context | 作用域 | 关键 API |
 |---------|-------|----------|
-| `ApplicationContext` | Application | `on/off('abilityLifecycle')`, `killAllProcesses()`, `setColorMode()` |
+| `ApplicationContext` | 应用级 | `on/off('abilityLifecycle')`, `killAllProcesses()`, `setColorMode()` |
 | `UIAbilityContext` | UIAbility | `startAbility()`, `terminateSelf()`, `requestPermissions()` |
-| `AbilityStageContext` | AbilityStage | Module-level resource access |
-| `ExtensionContext` | ExtensionAbility | Extension-specific operations |
+| `AbilityStageContext` | AbilityStage | 模块级资源访问 |
+| `ExtensionContext` | ExtensionAbility | Extension 特定操作 |
 
-### Getting Context
+### 获取 Context
 
-**In UIAbility:**
+**在 UIAbility 中:**
 ```typescript
 import { UIAbility, common } from '@kit.AbilityKit';
 
@@ -287,14 +287,14 @@ export default class EntryAbility extends UIAbility {
   onCreate(): void {
     // UIAbilityContext
     let uiAbilityContext: common.UIAbilityContext = this.context;
-    
+
     // ApplicationContext
     let appContext: common.ApplicationContext = this.context.getApplicationContext();
   }
 }
 ```
 
-**In Component (Page):**
+**在组件(页面)中:**
 ```typescript
 import { common } from '@kit.AbilityKit';
 
@@ -311,34 +311,34 @@ struct Index {
 }
 ```
 
-### UIAbilityContext Key APIs
+### UIAbilityContext 关键 API
 
-| API | Description |
+| API | 说明 |
 |-----|-------------|
-| `startAbility(want)` | Start another ability |
-| `startAbilityForResult(want)` | Start and get result |
-| `terminateSelf()` | Close current ability |
-| `terminateSelfWithResult(result)` | Close with result |
-| `connectServiceExtensionAbility(want, options)` | Connect to service |
-| `disconnectServiceExtensionAbility(connection)` | Disconnect service |
-| `requestPermissionsFromUser(permissions)` | Request permissions |
-| `setMissionLabel(label)` | Set recent task label |
-| `setMissionIcon(icon)` | Set recent task icon |
+| `startAbility(want)` | 启动另一个 ability |
+| `startAbilityForResult(want)` | 启动并获取结果 |
+| `terminateSelf()` | 关闭当前 ability |
+| `terminateSelfWithResult(result)` | 带结果关闭 |
+| `connectServiceExtensionAbility(want, options)` | 连接到服务 |
+| `disconnectServiceExtensionAbility(connection)` | 断开服务连接 |
+| `requestPermissionsFromUser(permissions)` | 请求权限 |
+| `setMissionLabel(label)` | 设置最近任务标签 |
+| `setMissionIcon(icon)` | 设置最近任务图标 |
 
-### ApplicationContext Key APIs
+### ApplicationContext 关键 API
 
-| API | Description |
+| API | 说明 |
 |-----|-------------|
-| `on('abilityLifecycle', callback)` | Monitor ability lifecycle |
-| `on('environment', callback)` | Monitor environment changes |
-| `on('applicationStateChange', callback)` | Monitor app state |
-| `getRunningProcessInformation()` | Get process info |
-| `killAllProcesses()` | Force exit all processes |
-| `setColorMode(mode)` | Set dark/light mode |
-| `setLanguage(language)` | Set app language |
-| `restartApp(want)` | Restart app (API 12+) |
+| `on('abilityLifecycle', callback)` | 监听 ability 生命周期 |
+| `on('environment', callback)` | 监听环境变化 |
+| `on('applicationStateChange', callback)` | 监听应用状态 |
+| `getRunningProcessInformation()` | 获取进程信息 |
+| `killAllProcesses()` | 强制退出所有进程 |
+| `setColorMode(mode)` | 设置深色/浅色模式 |
+| `setLanguage(language)` | 设置应用语言 |
+| `restartApp(want)` | 重启应用 (API 12+) |
 
-### Lifecycle Monitoring Example
+### 生命周期监听示例
 
 ```typescript
 import { UIAbility, AbilityLifecycleCallback } from '@kit.AbilityKit';
@@ -378,41 +378,41 @@ export default class EntryAbility extends UIAbility {
 }
 ```
 
-## ExtensionAbility Types
+## ExtensionAbility 类型
 
-| Type | Value | Description | Use Case |
+| 类型 | 值 | 说明 | 使用场景 |
 |------|-------|-------------|----------|
-| `FORM` | 0 | FormExtensionAbility | Widget development |
-| `WORK_SCHEDULER` | 1 | WorkSchedulerExtensionAbility | Background tasks |
-| `INPUT_METHOD` | 2 | InputMethodExtensionAbility | Input method |
-| `ACCESSIBILITY` | 4 | AccessibilityExtensionAbility | Accessibility services |
-| `BACKUP` | 9 | BackupExtensionAbility | Data backup/restore |
-| `ENTERPRISE_ADMIN` | 11 | EnterpriseAdminExtensionAbility | Enterprise device management |
-| `SHARE` | 16 | ShareExtensionAbility | Share functionality |
-| `DRIVER` | 18 | DriverExtensionAbility | Device drivers |
-| `ACTION` | 19 | ActionExtensionAbility | Custom actions |
-| `EMBEDDED_UI` | 21 | EmbeddedUIExtensionAbility | Cross-process UI embedding |
+| `FORM` | 0 | FormExtensionAbility | 卡片开发 |
+| `WORK_SCHEDULER` | 1 | WorkSchedulerExtensionAbility | 后台任务 |
+| `INPUT_METHOD` | 2 | InputMethodExtensionAbility | 输入法 |
+| `ACCESSIBILITY` | 4 | AccessibilityExtensionAbility | 辅助功能服务 |
+| `BACKUP` | 9 | BackupExtensionAbility | 数据备份/恢复 |
+| `ENTERPRISE_ADMIN` | 11 | EnterpriseAdminExtensionAbility | 企业设备管理 |
+| `SHARE` | 16 | ShareExtensionAbility | 分享功能 |
+| `DRIVER` | 18 | DriverExtensionAbility | 设备驱动 |
+| `ACTION` | 19 | ActionExtensionAbility | 自定义操作 |
+| `EMBEDDED_UI` | 21 | EmbeddedUIExtensionAbility | 跨进程 UI 嵌入 |
 
 ## BundleManager
 
-Query application and package information.
+查询应用和包信息。
 
 ### BundleFlags
 
-| Flag | Value | Description |
+| 标志 | 值 | 说明 |
 |------|-------|-------------|
-| `GET_BUNDLE_INFO_DEFAULT` | 0x00000000 | Default info only |
-| `GET_BUNDLE_INFO_WITH_APPLICATION` | 0x00000001 | Include applicationInfo |
-| `GET_BUNDLE_INFO_WITH_HAP_MODULE` | 0x00000002 | Include hapModuleInfo |
-| `GET_BUNDLE_INFO_WITH_ABILITY` | 0x00000004 | Include ability info (with HAP_MODULE) |
-| `GET_BUNDLE_INFO_WITH_EXTENSION_ABILITY` | 0x00000008 | Include extension info (with HAP_MODULE) |
-| `GET_BUNDLE_INFO_WITH_REQUESTED_PERMISSION` | 0x00000010 | Include permissions |
-| `GET_BUNDLE_INFO_WITH_METADATA` | 0x00000020 | Include metadata |
-| `GET_BUNDLE_INFO_WITH_SIGNATURE_INFO` | 0x00000080 | Include signature info |
+| `GET_BUNDLE_INFO_DEFAULT` | 0x00000000 | 仅默认信息 |
+| `GET_BUNDLE_INFO_WITH_APPLICATION` | 0x00000001 | 包含 applicationInfo |
+| `GET_BUNDLE_INFO_WITH_HAP_MODULE` | 0x00000002 | 包含 hapModuleInfo |
+| `GET_BUNDLE_INFO_WITH_ABILITY` | 0x00000004 | 包含 ability 信息(需 HAP_MODULE) |
+| `GET_BUNDLE_INFO_WITH_EXTENSION_ABILITY` | 0x00000008 | 包含 extension 信息(需 HAP_MODULE) |
+| `GET_BUNDLE_INFO_WITH_REQUESTED_PERMISSION` | 0x00000010 | 包含权限 |
+| `GET_BUNDLE_INFO_WITH_METADATA` | 0x00000020 | 包含元数据 |
+| `GET_BUNDLE_INFO_WITH_SIGNATURE_INFO` | 0x00000080 | 包含签名信息 |
 
-### Common Operations
+### 常用操作
 
-**Get Own Bundle Info**
+**获取自身包信息**
 ```typescript
 import { bundleManager } from '@kit.AbilityKit';
 
@@ -424,8 +424,8 @@ try {
   let bundleInfo = bundleManager.getBundleInfoForSelfSync(bundleFlags);
   console.log(`Bundle name: ${bundleInfo.name}`);
   console.log(`Version: ${bundleInfo.versionName}`);
-  
-  // Iterate abilities
+
+  // 遍历 abilities
   bundleInfo.hapModulesInfo?.forEach((hapInfo) => {
     hapInfo.abilitiesInfo?.forEach((abilityInfo) => {
       console.log(`Ability: ${abilityInfo.name}`);
@@ -436,7 +436,7 @@ try {
 }
 ```
 
-**Get Profile Configuration**
+**获取配置文件**
 ```typescript
 import { bundleManager } from '@kit.AbilityKit';
 
@@ -452,11 +452,11 @@ try {
 }
 ```
 
-## Caller/Callee (Background Communication)
+## Caller/Callee (后台通信)
 
-For background inter-ability communication.
+用于后台 ability 间通信。
 
-### Callee Side (Receiving)
+### Callee 端(接收)
 
 ```typescript
 import { UIAbility, Caller, Callee } from '@kit.AbilityKit';
@@ -467,13 +467,13 @@ const MSG_SEND_METHOD: string = 'CallSendMsg';
 class MyParcelable implements rpc.Parcelable {
   num: number = 0;
   str: string = '';
-  
+
   marshalling(messageSequence: rpc.MessageSequence): boolean {
     messageSequence.writeInt(this.num);
     messageSequence.writeString(this.str);
     return true;
   }
-  
+
   unmarshalling(messageSequence: rpc.MessageSequence): boolean {
     this.num = messageSequence.readInt();
     this.str = messageSequence.readString();
@@ -485,8 +485,8 @@ function sendMsgCallback(data: rpc.MessageSequence): rpc.Parcelable {
   let receivedData = new MyParcelable();
   data.readParcelable(receivedData);
   console.log(`Received: ${receivedData.str}`);
-  
-  // Return result
+
+  // 返回结果
   let reply = new MyParcelable();
   reply.num = receivedData.num + 1;
   reply.str = 'reply';
@@ -504,7 +504,7 @@ export default class CalleeAbility extends UIAbility {
 }
 ```
 
-### Caller Side (Sending)
+### Caller 端(发送)
 
 ```typescript
 import { UIAbility, Caller, Want } from '@kit.AbilityKit';
@@ -520,11 +520,11 @@ export default class CallerAbility extends UIAbility {
 
     try {
       this.caller = await this.context.startAbilityByCall(want);
-      
+
       let data = new MyParcelable();
       data.num = 1;
       data.str = 'hello';
-      
+
       let reply = await this.caller.call('CallSendMsg', data);
       let result = new MyParcelable();
       reply.readParcelable(result);
@@ -543,84 +543,84 @@ export default class CallerAbility extends UIAbility {
 }
 ```
 
-## Common Error Codes
+## 常见错误码
 
-### Ability System Errors (16000xxx)
+### Ability 系统错误 (16000xxx)
 
-| Code | Message | Cause | Solution |
+| 错误码 | 消息 | 原因 | 解决方案 |
 |------|---------|-------|----------|
-| 16000001 | The specified ability does not exist | Ability not found | Check bundleName, moduleName, abilityName; verify app installed |
-| 16000002 | Incorrect ability type | Wrong ability type for API | Match API with ability type |
-| 16000004 | Cannot start invisible component | Target exported=false | Set exported=true or request START_INVISIBLE_ABILITY permission |
-| 16000005 | Process permission failed | Insufficient permissions | Check required permissions |
-| 16000011 | Context does not exist | Context unavailable | Verify context validity |
-| 16000015 | Service timeout | Request timeout | Retry later |
-| 16000018 | Third-party redirect forbidden | API 11+ explicit start blocked | Use implicit start or openLink() |
-| 16000019 | No matching ability found | Implicit start no match | Check action/entities/uri configuration |
-| 16000050 | Internal error | System error | Check logs, retry |
-| 16000053 | Ability not on top | restartApp requires focus | Ensure app is focused |
-| 16000063 | Restart target invalid | Not same app or not UIAbility | Check restart target |
-| 16000064 | Restart too frequent | < 3s between restarts | Wait at least 3 seconds |
+| 16000001 | 指定的 ability 不存在 | Ability 未找到 | 检查 bundleName、moduleName、abilityName;确认应用已安装 |
+| 16000002 | Ability 类型不正确 | API 的 ability 类型错误 | 匹配 API 与 ability 类型 |
+| 16000004 | 无法启动不可见组件 | 目标 exported=false | 设置 exported=true 或请求 START_INVISIBLE_ABILITY 权限 |
+| 16000005 | 进程权限失败 | 权限不足 | 检查所需权限 |
+| 16000011 | Context 不存在 | Context 不可用 | 验证 context 有效性 |
+| 16000015 | 服务超时 | 请求超时 | 稍后重试 |
+| 16000018 | 禁止第三方重定向 | API 11+ 禁止显式启动 | 使用隐式启动或 openLink() |
+| 16000019 | 未找到匹配的 ability | 隐式启动无匹配 | 检查 action/entities/uri 配置 |
+| 16000050 | 内部错误 | 系统错误 | 检查日志,重试 |
+| 16000053 | Ability 未置顶 | restartApp 需要焦点 | 确保应用获得焦点 |
+| 16000063 | 重启目标无效 | 非同一应用或非 UIAbility | 检查重启目标 |
+| 16000064 | 重启过于频繁 | 重启间隔 < 3 秒 | 至少等待 3 秒 |
 
-### Bundle Manager Errors (17700xxx)
+### Bundle Manager 错误 (17700xxx)
 
-| Code | Message | Cause | Solution |
+| 错误码 | 消息 | 原因 | 解决方案 |
 |------|---------|-------|----------|
-| 17700001 | Bundle not found | App not installed | Verify installation |
-| 17700002 | Module not found | Module not installed | Check moduleName |
-| 17700003 | Ability not found | Ability doesn't exist | Check abilityName |
-| 17700024 | No profile in HAP | Profile file missing | Add profile to metadata |
-| 17700026 | Specified bundle disabled | Bundle is disabled | Enable the bundle |
-| 17700029 | Ability disabled | Ability is disabled | Enable the ability |
+| 17700001 | Bundle 未找到 | 应用未安装 | 验证安装 |
+| 17700002 | Module 未找到 | Module 未安装 | 检查 moduleName |
+| 17700003 | Ability 未找到 | Ability 不存在 | 检查 abilityName |
+| 17700024 | HAP 中无配置文件 | 缺少配置文件 | 将配置添加到 metadata |
+| 17700026 | 指定的 bundle 被禁用 | Bundle 被禁用 | 启用该 bundle |
+| 17700029 | Ability 被禁用 | Ability 被禁用 | 启用该 ability |
 
-## Best Practices
+## 最佳实践
 
-### 1. Use Correct Context
+### 1. 使用正确的 Context
 ```typescript
-// For UI operations - use UIAbilityContext
-let uiContext = this.context; // in UIAbility
+// 对于 UI 操作 - 使用 UIAbilityContext
+let uiContext = this.context; // 在 UIAbility 中
 
-// For app-wide operations - use ApplicationContext
+// 对于应用级操作 - 使用 ApplicationContext
 let appContext = this.context.getApplicationContext();
 ```
 
-### 2. Handle Lifecycle Properly
+### 2. 正确处理生命周期
 ```typescript
 onForeground(): void {
-  // Resume: refresh data, restart animations
+  // 恢复:刷新数据、重新启动动画
 }
 
 onBackground(): void {
-  // Pause: save state, release heavy resources
-  // Don't rely on this for critical saves
+  // 暂停:保存状态、释放重量级资源
+  // 不要依赖此方法进行关键保存
 }
 ```
 
-### 3. Use Implicit Start for Cross-App (API 11+)
+### 3. 对跨应用使用隐式启动 (API 11+)
 ```typescript
-// DON'T: Explicit start to third-party
+// 不要这样做: 显式启动第三方应用
 let want = { bundleName: 'com.other.app', abilityName: 'Main' };
 
-// DO: Use openLink or implicit start
+// 应该这样做: 使用 openLink 或隐式启动
 this.context.openLink('https://example.com');
-// OR
+// 或者
 let want = { action: 'ohos.want.action.viewData', uri: 'https://...' };
 ```
 
-### 4. Clean Up Resources
+### 4. 清理资源
 ```typescript
 onDestroy(): void {
-  // Unregister callbacks
+  // 取消注册回调
   appContext.off('abilityLifecycle', this.lifecycleId);
-  
-  // Release connections
+
+  // 释放连接
   if (this.caller) {
     this.caller.release();
   }
 }
 ```
 
-### 5. Handle Errors Gracefully
+### 5. 优雅地处理错误
 ```typescript
 try {
   await this.context.startAbility(want);
@@ -635,9 +635,9 @@ try {
 }
 ```
 
-## Documentation References
+## 文档参考
 
-| Topic | File Path |
+| 主题 | 文件路径 |
 |-------|-----------|
 | UIAbility | `js-apis-app-ability-uiAbility.md` |
 | AbilityStage | `js-apis-app-ability-abilityStage.md` |
@@ -645,5 +645,5 @@ try {
 | UIAbilityContext | `js-apis-inner-application-uiAbilityContext.md` |
 | ApplicationContext | `js-apis-inner-application-applicationContext.md` |
 | bundleManager | `js-apis-bundleManager.md` |
-| Ability Error Codes | `errorcode-ability.md` |
-| Bundle Error Codes | `errorcode-bundle.md` |
+| Ability 错误码 | `errorcode-ability.md` |
+| Bundle 错误码 | `errorcode-bundle.md` |

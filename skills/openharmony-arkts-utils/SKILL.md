@@ -13,6 +13,21 @@ ArkTS提供全面的工具库，包括异步并发、多线程（TaskPool/Worker
 
 **官方文档：** https://docs.openharmony.cn/
 
+## 📁 详细 API 参考文件
+
+本技能文件提供概念指南和常用示例。详细 API 签名和完整示例请参考 `refs/` 文件夹：
+
+| 文件 | 内容 | 适用场景 |
+|------|------|----------|
+| [`refs/taskpool.md`](refs/taskpool.md) | TaskPool 完整 API | Task、TaskGroup、优先级、延时执行 |
+| [`refs/worker.md`](refs/worker.md) | Worker 完整 API | ThreadWorker、消息通信、生命周期 |
+| [`refs/collections.md`](refs/collections.md) | 共享容器 API | collections.Array/Map/Set (跨线程) |
+| [`refs/utils.md`](refs/utils.md) | ArkTSUtils API | AsyncLock、ASON、Sendable工具 |
+| [`refs/buffer.md`](refs/buffer.md) | Buffer API | 二进制数据处理、编码转换 |
+| [`refs/xml.md`](refs/xml.md) | XML API | XmlSerializer、XmlPullParser |
+| [`refs/containers.md`](refs/containers.md) | 线性/非线性容器 API | ArrayList、HashMap 等普通容器 |
+| [`refs/error-codes.md`](refs/error-codes.md) | 错误码速查表 | 10200001-10200301 错误处理 |
+
 ## 异步并发 (Promise & async/await)
 
 ### Promise
@@ -219,6 +234,8 @@ taskpool.executeDelayed(2000, task);
 - Promise不支持跨线程传递
 - Priority的IDLE优先级用于标记需要在后台运行的耗时任务，只在所有线程都空闲时触发执行
 
+> 📖 **详细 API 参考:** [`refs/taskpool.md`](refs/taskpool.md) — Task、TaskGroup、优先级、延时执行的完整 API 签名和示例
+
 ## 多线程 - Worker
 
 Worker提供专用的长期后台线程。同个进程下，最多支持同时开启64个Worker线程，实际数量由进程内存决定。
@@ -333,6 +350,8 @@ workerInstance.onerror = (error: ErrorEvent) => {
 - 有关联的一系列同步任务（使用同一句柄）
 - 需要指定运行线程的任务
 
+> 📖 **详细 API 参考:** [`refs/worker.md`](refs/worker.md) — ThreadWorker、消息通信、生命周期管理的完整 API
+
 ## Sendable - 跨线程共享对象
 
 Sendable启用安全的对象跨线程共享。Sendable对象分配在共享堆（SharedHeap）中，实现跨并发实例的内存共享。
@@ -439,6 +458,8 @@ async function add(arr: collections.Array<number>, lock: ArkTSUtils.locks.AsyncL
 
 > **说明：** ArkTS共享容器不是线程安全的，内部使用了fail-fast机制。在多线程场景下修改容器内属性时，需要使用ArkTS提供的异步锁机制保证安全访问。
 
+> 📖 **详细 API 参考:** [`refs/collections.md`](refs/collections.md) — collections.Array/Map/Set 跨线程共享容器完整 API
+
 ### 异步锁 (AsyncLock)
 
 ```typescript
@@ -516,6 +537,8 @@ export let globalCounter = new GlobalCounter();
 - 共享模块导出的所有对象必须是可共享的Sendable类型
 - 共享模块不支持re-export写法
 
+> 📖 **详细 API 参考:** [`refs/utils.md`](refs/utils.md) — AsyncLock、ConditionVariable、ASON、LruCache 完整 API
+
 ## 容器库
 
 ### ArkTS共享容器 (@arkts.collections)
@@ -581,6 +604,8 @@ const value = map.get('key1'); // 100
 
 - **线性容器**：按顺序访问，底层基于数组或链表实现。优化数据访问速度，适合频繁读取元素或顺序操作
 - **非线性容器**：快速查找，底层基于哈希或红黑树实现。支持快速查找，key/value类型符合ECMA标准
+
+> 📖 **详细 API 参考:** [`refs/containers.md`](refs/containers.md) — ArrayList、HashMap、TreeMap 等普通容器完整 API
 
 ## XML处理
 
@@ -661,6 +686,8 @@ const jsonObj = xml.fastConvertToJSObject(xmlString, {
 // }
 ```
 
+> 📖 **详细 API 参考:** [`refs/xml.md`](refs/xml.md) — XmlSerializer、XmlPullParser、XML转换完整 API
+
 ## Buffer和二进制
 
 ### Buffer
@@ -695,6 +722,8 @@ task.setTransferList([arrayBuffer]);
 task.setCloneList([arrayBuffer]);
 // 拷贝后原始ArrayBuffer仍可用
 ```
+
+> 📖 **详细 API 参考:** [`refs/buffer.md`](refs/buffer.md) — Buffer 创建、读写、编码转换完整 API
 
 ## JSON工具
 
@@ -931,7 +960,22 @@ workerInstance.onmessage = (event) => {
 | 竞态条件 | 缺少异步锁 | 使用`AsyncLock` |
 | Promise未捕获 | 缺少catch处理 | 使用errorManager监听unhandled rejection |
 
+> 📖 **错误码速查:** [`refs/error-codes.md`](refs/error-codes.md) — 10200001-10200301 错误码含义和修复建议
+
 ## 进一步参考
+
+**📁 本地 API 参考 (refs/ 文件夹):**
+
+| 文件 | 内容 |
+|------|------|
+| [`refs/taskpool.md`](refs/taskpool.md) | TaskPool 完整 API — Task、TaskGroup、优先级、延时执行 |
+| [`refs/worker.md`](refs/worker.md) | Worker 完整 API — ThreadWorker、消息通信、生命周期 |
+| [`refs/collections.md`](refs/collections.md) | 共享容器 API — collections.Array/Map/Set (跨线程传递) |
+| [`refs/utils.md`](refs/utils.md) | ArkTSUtils API — AsyncLock、ASON、Sendable工具 |
+| [`refs/buffer.md`](refs/buffer.md) | Buffer API — 二进制数据处理、编码转换 |
+| [`refs/xml.md`](refs/xml.md) | XML API — XmlSerializer、XmlPullParser |
+| [`refs/containers.md`](refs/containers.md) | 线性/非线性容器 API — ArrayList、HashMap 等普通容器 |
+| [`refs/error-codes.md`](refs/error-codes.md) | 错误码速查表 — 10200001-10200301 错误处理 |
 
 **官方文档：**
 - **TaskPool API:** https://docs.openharmony.cn/application-dev/reference/apis-arkui/js-apis-taskpool/
